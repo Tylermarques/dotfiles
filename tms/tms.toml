@@ -1,0 +1,3 @@
+search_paths = ['/home/tyler/Projects']
+excluded_dirs = []
+default_session = 'Main'
