@@ -104,7 +104,7 @@ fi
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-alias zshconfig="nvim ~/.zshrc"
+alias zshconfig="nvim ~/.config/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -160,5 +160,5 @@ export ANSIBLE_CONFIG=$HOME/.config/ansible/ansible.cfg
 LS_COLORS=$LS_COLORS:'ow=1;41;30:'
 export LS_COLORS
 export PATH=$HOME/.config/rofi/scripts:$PATH
-export TERMINAL=/home/tyler/.cargo/bin/alacritty
+export TERMINAL=$HOME/.cargo/bin/alacritty
 
