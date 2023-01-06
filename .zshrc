@@ -77,7 +77,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git aws fzf zsh-autosuggestions zsh-syntax-highlighting docker docker-compose)
+plugins=(git aws fzf zsh-autosuggestions zsh-syntax-highlighting docker docker-compose tmux)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -140,6 +140,7 @@ export NVM_DIR="$HOME/.nvm"
 source /etc/bash_completion.d/azure-cli
 source ~/.hass
 source ~/.tokens
+source $HOME/.config/aliases.zsh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -161,4 +162,4 @@ LS_COLORS=$LS_COLORS:'ow=1;41;30:'
 export LS_COLORS
 export PATH=$HOME/.config/rofi/scripts:$PATH
 export TERMINAL=$HOME/.cargo/bin/alacritty
-
+export LD_LIBRARY_PATH=/usr/local/lib
