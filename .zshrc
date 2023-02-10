@@ -77,7 +77,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git aws fzf zsh-autosuggestions zsh-syntax-highlighting docker docker-compose tmux)
+plugins=(git aws fzf zsh-autosuggestions zsh-syntax-highlighting docker docker-compose tmux kubectl)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -122,8 +122,8 @@ source $ZSH/cache/completions/*
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 #### NVIDIA cuDNN paths ####
-export PATH="/usr/local/cuda-11.7/bin":$PATH
-export LD_LIBRARY_PATH="/usr/local/cuda-11.7/lib64"
+export PATH="/usr/local/cuda/bin":$PATH
+export LD_LIBRARY_PATH="/usr/local/cuda/lib64"
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/opt/mssql-tools/bin"

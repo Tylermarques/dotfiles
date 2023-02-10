@@ -223,6 +223,7 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 
 # Bind keys for Rofi
 bindsym $mod+d exec --no-startup-id ~/.config/rofi/launchers/type-1/launcher.sh 
+bindsym $mod+Shift+d exec --no-startup-id zsh ~/.config/scripts/$(ls ~/.config/scripts/ | rofi -dmenu -theme ~/.config/rofi/launchers/type-1/style-1.rasi -p "Run: ")
 bindsym $mod+x exec --no-startup-id powermenu_t2
 
 # Launch polybar
