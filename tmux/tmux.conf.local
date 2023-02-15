@@ -440,9 +440,31 @@ set -g @plugin '27medkamal/tmux-session-wizard'
 # # /!\ do not remove the previous line
 
 ### CUSTOM BINDINGs ###
-bind -n C-l select-pane -R #!important
-bind -n C-j select-pane -D #!important
-bind -n C-k select-pane -U #!important
-bind -n C-h select-pane -L #!important
+
+# Smart pane switching with awareness of Vim splits.
+# See: https://github.com/christoomey/vim-tmux-navigator
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?)(diff)?$'"
+bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
+bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
+bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
+bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
+tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
+if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
+    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
+if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
+    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+
+bind-key -T copy-mode-vi 'C-h' select-pane -L
+bind-key -T copy-mode-vi 'C-j' select-pane -D
+bind-key -T copy-mode-vi 'C-k' select-pane -U
+bind-key -T copy-mode-vi 'C-l' select-pane -R
+bind-key -T copy-mode-vi 'C-\' select-pane -l
+
+
+# bind -n C-l select-pane -R #!important
+# bind -n C-j select-pane -D #!important
+# bind -n C-k select-pane -U #!important
+# bind -n C-h select-pane -L #!important
 bind E new-window -n "~/.config/.zshrc" sh -c 'nvim ~/.config/.zshrc && omz reload && tmux display "reloaded ZSH"'
 bind a new-window -n "~/.config/aliases.zsh" sh -c 'nvim ~/.config/aliases.zsh && omz reload && tmux display "reloaded ZSH"'
