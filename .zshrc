@@ -109,6 +109,8 @@ alias zshconfig="nvim ~/.config/.zshrc"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
 PATH="$HOME/bin:$PATH"
 
 for file in ~/bin/useful-commands/*; do
@@ -128,9 +130,14 @@ export LD_LIBRARY_PATH="/usr/local/cuda/lib64"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/opt/mssql-tools/bin"
 
+## Go bin path
 . "$HOME/.cargo/env"
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$(go env GOPATH)/bin
+
+## Cargo (rust) bin bath
+
+export PATH=$PATH:$HOME/.cargo/bin
 
 #### Node / NVM setup ####
 export NVM_DIR="$HOME/.nvm"
@@ -141,6 +148,7 @@ source /etc/bash_completion.d/azure-cli
 source ~/.hass
 source ~/.tokens
 source $HOME/.config/aliases.zsh
+source $HOME/.config/zoxide.zsh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -163,3 +171,8 @@ export LS_COLORS
 export PATH=$HOME/.config/rofi/scripts:$PATH
 export TERMINAL=$HOME/.cargo/bin/alacritty
 export LD_LIBRARY_PATH=/usr/local/lib
+
+export ZPLUG_HOME=$HOME/.config/zplug
+
+export XDG_CONFIG_HOME=$HOME/.config
+

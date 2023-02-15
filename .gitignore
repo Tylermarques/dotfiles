@@ -1,3 +1,4 @@
+.zcompdump*
 ansible
 appimagelauncher.cfg
 autostart
@@ -106,3 +107,16 @@ zoomus.conf
 alvr/
 argocd/
 auth0/
+htop/
+Arduino IDE/
+Bitwarden/
+MusicBrainz/
+arduino-ide/
+mpd/*
+gh/hosts.yml
+openrazer/
+polychromatic/
+privateinternetaccess/
+tmux/plugins/
+zoxide.zsh
+
