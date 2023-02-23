@@ -6,8 +6,9 @@
 -- You can think of a Lua "table" as a dictionary like data structure the
 -- normal format is "key = value". These also handle array like data structures
 -- where a value with no key simply has an implicit numeric key
-local config = {
 
+
+local config = {
   -- Configure AstroNvim updates
   updater = {
     remote = "origin", -- remote to use
@@ -25,10 +26,8 @@ local config = {
     --   ["remote3"] = "github_user", -- GitHub user assume AstroNvim fork
     -- },
   },
-
   -- Set colorscheme to use
   colorscheme = "astrodark",
-
   -- Add highlight groups in any theme
   highlights = {
     -- init = { -- this table overrides highlights in all themes
@@ -38,7 +37,6 @@ local config = {
     --   Normal = { bg = "#000000" },
     -- },
   },
-
   -- set vim options here (vim.<first_key>.<second_key> = value)
   options = {
     opt = {
@@ -75,7 +73,6 @@ local config = {
     virtual_text = true,
     underline = true,
   },
-
   -- Extend LSP configuration
   lsp = {
     -- enable servers that you already have installed without mason
@@ -138,7 +135,6 @@ local config = {
       -- },
     },
   },
-
   -- Mapping data with "desc" stored directly by vim.keymap.set().
   --
   -- Please use this mappings table to set keyboard mapping since this is the
@@ -164,7 +160,6 @@ local config = {
       -- ["<esc>"] = false,
     },
   },
-
   -- Configure require("lazy").setup() options
   lazy = {
     defaults = { lazy = true },
@@ -175,9 +170,20 @@ local config = {
       },
     },
   },
-
   -- Configure plugins
   plugins = {
+    {
+      "AckslD/swenv.nvim",
+      config = true,
+      ft = "python",
+      opts = {
+        venvs_path = vim.fn.expand('~/.cache/pypoetry/virtualenvs'),
+        get_venvs = function(venvs_path)
+          return require('swenv.api').get_venvs(venvs_path)
+        end,
+      },
+      keys = { { "<leader>lv", function() require("swenv.api").pick_venv() end, desc = "select VENV" } },
+    },
     -- You can disable default plugins as follows:
     -- { "max397574/better-escape.nvim", enabled = false },
     --
@@ -312,7 +318,6 @@ local config = {
       },
     },
   },
-
   -- Customize Heirline options
   heirline = {
     -- -- Customize different separators between sections
@@ -340,7 +345,6 @@ local config = {
     --   },
     -- },
   },
-
   -- This function is run last and is a good place to configuring
   -- augroups/autocommands and custom filetypes also this just pure lua so
   -- anything that doesn't fit in the normal config locations above can go here

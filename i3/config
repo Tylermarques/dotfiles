@@ -239,6 +239,7 @@ workspace $ws3 output HDMI-1
 workspace $ws4 output DP-0
 workspace $ws5 output HDMI-0
 workspace $ws6 output HDMI-1
+workspace $ws9 output DP-2
 
 assign [class="Rhythmbox"] $ws2
 assign [class="obsidian"] $ws1

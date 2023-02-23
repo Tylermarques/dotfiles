@@ -77,7 +77,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git aws fzf zsh-autosuggestions zsh-syntax-highlighting docker docker-compose tmux kubectl)
+plugins=(git aws fzf zsh-autosuggestions zsh-syntax-highlighting docker docker-compose tmux kubectl poetry)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -150,20 +150,6 @@ source ~/.tokens
 source $HOME/.config/aliases.zsh
 source $HOME/.config/zoxide.zsh
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/tyler/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/tyler/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/tyler/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/tyler/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 export ANSIBLE_CONFIG=$HOME/.config/ansible/ansible.cfg
 LS_COLORS=$LS_COLORS:'ow=1;41;30:'

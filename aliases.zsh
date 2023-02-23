@@ -22,3 +22,8 @@ heather-fan-speed() {
     echo "Need to provide a number between 0 and 100"
   fi
 }
+
+alias bathelp='bat --plain --language=help'
+help() {
+    "$@" --help 2>&1 | bathelp
+}
