@@ -162,3 +162,4 @@ export ZPLUG_HOME=$HOME/.config/zplug
 
 export XDG_CONFIG_HOME=$HOME/.config
 
+RUSTC_WRAPPER=sccache
