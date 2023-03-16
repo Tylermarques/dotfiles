@@ -161,5 +161,30 @@ export LD_LIBRARY_PATH=/usr/local/lib
 export ZPLUG_HOME=$HOME/.config/zplug
 
 export XDG_CONFIG_HOME=$HOME/.config
+export PATH=$PATH:$HOME/esp/xtensa-lx106-elf/bin
 
-RUSTC_WRAPPER=sccache
+export RUSTC_WRAPPER=sccache
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/tyler/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/tyler/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/tyler/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/tyler/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# For ESP Rust development
+export LIBCLANG_PATH="/home/tyler/.espressif/tools/xtensa-esp32-elf-clang/esp-15.0.0-20221201-x86_64-unknown-linux-gnu/esp-clang/lib/"
+export PATH="/home/tyler/.espressif/tools/xtensa-esp32-elf-gcc/8_4_0-esp-2021r2-patch3-x86_64-unknown-linux-gnu/bin/:/home/tyler/.espressif/tools/xtensa-esp32s2-elf-gcc/8_4_0-esp-2021r2-patch3-x86_64-unknown-linux-gnu/bin/:/home/tyler/.espressif/tools/xtensa-esp32s3-elf-gcc/8_4_0-esp-2021r2-patch3-x86_64-unknown-linux-gnu/bin/:$PATH"
+
+export WORKON_HOME="$HOME/.virtualenvs/"
+source $(pew shell_config)
+
+

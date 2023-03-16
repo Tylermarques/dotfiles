@@ -30,3 +30,4 @@ help() {
 
 alias cat='bat'
 alias music='ncmpcpp'
+alias ha='hass-cli'
