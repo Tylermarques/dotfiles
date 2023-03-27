@@ -1,1 +1,2 @@
-resource-path: ["/home/tyler/notes/Attachments"]
+resource-path: [".", "/home/tyler/notes/Attachments", "/home/tyler/notes/Research"]
+csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl"

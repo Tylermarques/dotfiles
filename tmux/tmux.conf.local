@@ -468,3 +468,4 @@ bind-key -T copy-mode-vi 'C-\' select-pane -l
 # bind -n C-h select-pane -L #!important
 bind E new-window -n "~/.config/.zshrc" sh -c 'nvim ~/.config/.zshrc && omz reload && tmux display "reloaded ZSH"'
 bind a new-window -n "~/.config/aliases.zsh" sh -c 'nvim ~/.config/aliases.zsh && omz reload && tmux display "reloaded ZSH"'
+
