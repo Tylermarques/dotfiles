@@ -1,5 +1,5 @@
 alias v='nvim'
-alias v-config='nvim ~/.config/astrovim/lua/user/init.lua'
+alias v-config='nvim ~/.config/astronvim/lua/user/init.lua'
 alias tx="tmuxinator ls | tail -n +2 | awk '{OFS=\"\n\";\$1=\$1}1' | fzf | xargs tmuxinator start \$1"
 alias k='kubectl'
 alias tv='tidy-viewer'
