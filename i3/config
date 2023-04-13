@@ -31,7 +31,7 @@ exec --no-startup-id dex --autostart --environment i3
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock
 
-bindsym $mod+Shift+x exec $XDG_CONFIG_HOME/i3/lock.sh
+bindsym $mod+Shift+x exec gnome-session-quit
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -180,10 +180,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -258,9 +258,26 @@ assign [class="jetbrains-pycharm"] $ws4
 assign [class='obs'] $ws11
 assign [class="chrome"] $ws12
 
-exec rhythmbox
+exec --no-startup-id /usr/lib/gsd-xsettings
+exec_always --no-startup-id gnome-power-manager
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec --no-startup-id gnome-flashback
+
 exec streamdeck --no-ui
 exec firefox
 exec slack
 exec obsidian
+exec --no-startup-id i3-msg 'workspace $ws2; exec alacritty --title "Music" -e tmuxinator start music'
+
+## THIS MUST BE THE LAST LINE ##
+# Comes from https://zork.net/~st/jottings/gnome-i3.html
+# Tells gnome-flashback i3 has started correctly
+# exec --no-startup-id dbus-send \
+#     --session \
+#     --print-reply=literal \
+#     --dest=org.gnome.SessionManager \
+#     "/org/gnome/SessionManager" \
+#     org.gnome.SessionManager.RegisterClient \
+#     "string:i3" \
+#     "string:$DESKTOP_AUTOSTART_ID"
 

@@ -31,3 +31,4 @@ help() {
 alias cat='bat'
 alias music='ncmpcpp'
 alias ha='hass-cli'
+alias bw-login='export BW_SESSION="$(bw unlock --raw)"'
