@@ -121,7 +121,19 @@ done
 autoload -U +X bashcompinit && bashcompinit
 source $ZSH/cache/completions/*
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == */home/tyler/.fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/tyler/.fzf/bin"
+fi
+
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "/home/tyler/.fzf/shell/completion.zsh" 2> /dev/null
+
+# Key bindings
+# ------------
+source "/home/tyler/.fzf/shell/key-bindings.zsh"
 
 #### NVIDIA cuDNN paths ####
 export PATH="/usr/local/cuda/bin":$PATH
@@ -143,6 +155,9 @@ export PATH=$PATH:$HOME/.cargo/bin
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+#### Dotnet
+export PATH="$PATH:$HOME/.dotnet"
 
 source /etc/bash_completion.d/azure-cli
 source ~/.hass
@@ -186,5 +201,4 @@ export PATH="/home/tyler/.espressif/tools/xtensa-esp32-elf-gcc/8_4_0-esp-2021r2-
 
 export WORKON_HOME="$HOME/.virtualenvs/"
 source $(pew shell_config)
-
 
