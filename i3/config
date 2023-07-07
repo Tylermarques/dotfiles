@@ -133,6 +133,7 @@ set $ws9 "9"
 set $ws10 "10"
 set $ws11 "11:OBS"
 set $ws12 "12:Calendar"
+set $ws13 "13:Notes"
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -147,6 +148,7 @@ bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
 bindsym $mod+o workspace $ws11
 bindsym $mod+c workspace $ws12
+bindsym $mod+n workspace $ws13
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1
@@ -161,6 +163,29 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 bindsym $mod+Shift+o move container to workspace $ws11
 bindsym $mod+Shift+c move container to workspace $ws12
+bindsym $mod+Shift+n move container to workspace $ws13
+
+
+# Set the specific locations for workspaces by Monitor
+workspace $ws1 output DP-0
+workspace $ws2 output HDMI-0
+workspace $ws3 output HDMI-1
+workspace $ws4 output DP-0
+workspace $ws5 output HDMI-0
+workspace $ws6 output HDMI-1
+workspace $ws9 output DP-2
+workspace $ws11 output HDMI-0
+workspace $ws12 output HDMI-1
+workspace $ws13 output DP-2
+
+# Use `xprop` to select window and see `class` value
+assign [class="Rhythmbox"] $ws2
+assign [class="Slack"] $ws3
+assign [class="Thunderbird"] $ws3
+assign [class="jetbrains-pycharm"] $ws4
+assign [class='obs'] $ws11
+assign [class="chrome"] $ws12
+assign [class="obsidian"] $ws13
 
 
 # reload the configuration file
@@ -183,6 +208,12 @@ mode "resize" {
         bindsym k resize shrink height 10 px or 10 ppt
         bindsym l resize grow width 10 px or 10 ppt
 
+        # Do the same as the above, but finer
+        bindsym Shift+h resize shrink width 5 px or 5 ppt
+        bindsym Shift+j resize grow height 5 px or 5 ppt
+        bindsym Shift+k resize shrink height 5 px or 5 ppt
+        bindsym Shift+l resize grow width 5 px or 5 ppt
+        
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
@@ -211,18 +242,10 @@ client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-col
 client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
 
-#bar {
-#  status_command exec /home/tyler/.config/i3status/i3status/mybar.sh
- #        status_command i3status
-	# colors {
-	# 	background $bg-color
-	#     	separator #757575
-	# 	#                  border             background         text
-	# 	focused_workspace  $bg-color          $bg-color          $text-color
-	# 	inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-	# 	urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-	# }
-#}
+bar {
+# Trying to get system tray to work with polybar
+        tray_output none
+}
 
 # Bind keys for Rofi
 bindsym $mod+d exec --no-startup-id ~/.config/rofi/launchers/type-1/launcher.sh 
@@ -235,26 +258,8 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh --hack
 # My custom shortcuts
 ## Screenshot specific area
 bindsym --release ctrl+Shift+s exec maim -s | xclip -selection clipboard -t image/png 
+bindsym --release ctrl+Mod1+Shift+s exec maim -s > ~/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S').png
 
-# Set the specific locations for workspaces by Monitor
-workspace $ws1 output DP-0
-workspace $ws2 output HDMI-0
-workspace $ws3 output HDMI-1
-workspace $ws4 output DP-0
-workspace $ws5 output HDMI-0
-workspace $ws6 output HDMI-1
-workspace $ws9 output DP-2
-workspace $ws11 output HDMI-0
-workspace $ws12 output HDMI-1
-
-
-assign [class="Rhythmbox"] $ws2
-assign [class="obsidian"] $ws1
-assign [class="Slack"] $ws3
-assign [class="Thunderbird"] $ws3
-assign [class="jetbrains-pycharm"] $ws4
-assign [class='obs'] $ws11
-assign [class="chrome"] $ws12
 
 # i3-Gnome settings
 exec --no-startup-id /usr/lib/gsd-xsettings

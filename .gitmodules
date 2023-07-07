@@ -7,3 +7,6 @@
 [submodule "astronvim"]
 	path = astronvim
 	url = git@github.com:Tylermarques/astronvim_config.git
+[submodule "oh-my-tmux"]
+	path = oh-my-tmux
+	url = https://github.com/gpakosz/.tmux.git

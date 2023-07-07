@@ -136,8 +136,8 @@ fi
 source "/home/tyler/.fzf/shell/key-bindings.zsh"
 
 #### NVIDIA cuDNN paths ####
-export PATH="/usr/local/cuda/bin":$PATH
-export LD_LIBRARY_PATH="/usr/local/cuda/lib64"
+export PATH="/usr/local/cuda-12.0/bin${PATH:+:${PATH}}"
+export LD_LIBRARY_PATH="/usr/local/cuda-12.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/opt/mssql-tools/bin"
@@ -201,4 +201,20 @@ export PATH="/home/tyler/.espressif/tools/xtensa-esp32-elf-gcc/8_4_0-esp-2021r2-
 
 export WORKON_HOME="$HOME/.virtualenvs/"
 source $(pew shell_config)
+
+
+# Shell-GPT integration ZSH v0.1
+_sgpt_zsh() {
+    _sgpt_prev_cmd=$BUFFER
+    BUFFER+="⌛"
+    zle -I && zle redisplay
+    BUFFER=$(sgpt --shell <<< "$_sgpt_prev_cmd")
+    zle end-of-line
+}
+zle -N _sgpt_zsh
+bindkey ^y _sgpt_zsh
+# Shell-GPT integration ZSH v0.1
+
+### Task warrior Settings
+export TASKRC=$XDG_CONFIG_HOME/.taskrc
 

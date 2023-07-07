@@ -32,3 +32,11 @@ alias cat='bat'
 alias music='ncmpcpp'
 alias ha='hass-cli'
 alias bw-login='export BW_SESSION="$(bw unlock --raw)"'
+
+# Music searches for mpd
+alias album='mpc list album | fzf -m | while read album; do mpc searchadd album "$album"; done'
+
+alias artist='mpc list artist | fzf -m | while read artist; do mpc searchadd artist "$artist"; done'
+alias song='mpc search title "" | fzf -m | mpc add'
+alias tw='taskwarrior-tui'
+
