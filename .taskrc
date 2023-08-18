@@ -15,7 +15,7 @@
 # Use the command 'task show' to see all defaults and overrides
 
 # Files
-data.location=/home/tyler/.tasks
+data.location=$HOME/.tasks
 
 # To use the default location of the XDG directories,
 # move this configuration file from ~/.taskrc to ~/.config/task/taskrc and uncomment below
@@ -39,9 +39,9 @@ data.location=/home/tyler/.tasks
 #include solarized-light-256.theme
 #include no-color.theme
 
-taskd.certificate=/home/tyler/.tasks/private.cert
-taskd.key=/home/tyler/.tasks/private.key
-taskd.ca=/home/tyler/.tasks/ca.cert.pem
+taskd.certificate=$HOME/.tasks/private.cert
+taskd.key=$HOME/.tasks/private.key
+taskd.ca=$HOME/.tasks/ca.cert.pem
 taskd.server=inthe.am:53589
 taskd.credentials=inthe_am/tylermarques/73315693-62e2-4a74-b200-549ad1bf4ff2
 taskd.trust=ignore hostname
