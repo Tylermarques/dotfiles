@@ -110,6 +110,8 @@ auth0/
 htop/
 Arduino IDE/
 Bitwarden/
+Bitwarden CLI/
+spotify/
 MusicBrainz/
 arduino-ide/
 mpd/*
@@ -120,3 +122,8 @@ privateinternetaccess/
 tmux/plugins/
 zoxide.zsh
 *.log
+**/cache/
+**/Cache/
+**/*cache/
+**/*Cache/
+

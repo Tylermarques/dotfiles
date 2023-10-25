@@ -106,6 +106,7 @@ fi
 # Example aliases
 alias zshconfig="nvim ~/.config/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+source $HOME/.config/aliases.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -113,9 +114,6 @@ alias zshconfig="nvim ~/.config/.zshrc"
 
 PATH="$HOME/bin:$PATH"
 
-for file in ~/bin/useful-commands/*; do
-    source "$file"
-done
 
 
 autoload -U +X bashcompinit && bashcompinit
@@ -127,13 +125,7 @@ if [[ ! "$PATH" == */home/tyler/.fzf/bin* ]]; then
   PATH="${PATH:+${PATH}:}/home/tyler/.fzf/bin"
 fi
 
-# Auto-completion
-# ---------------
-[[ $- == *i* ]] && source "/home/tyler/.fzf/shell/completion.zsh" 2> /dev/null
 
-# Key bindings
-# ------------
-source "/home/tyler/.fzf/shell/key-bindings.zsh"
 
 #### NVIDIA cuDNN paths ####
 export PATH="/usr/local/cuda-12.0/bin${PATH:+:${PATH}}"
@@ -142,13 +134,8 @@ export LD_LIBRARY_PATH="/usr/local/cuda-12.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRA
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/opt/mssql-tools/bin"
 
-## Go bin path
-. "$HOME/.cargo/env"
-export PATH=$PATH:/usr/local/go/bin
-export PATH=$PATH:$(go env GOPATH)/bin
 
 ## Cargo (rust) bin bath
-
 export PATH=$PATH:$HOME/.cargo/bin
 
 #### Node / NVM setup ####
@@ -159,7 +146,6 @@ export NVM_DIR="$HOME/.nvm"
 #### Dotnet
 export PATH="$PATH:$HOME/.dotnet"
 
-source /etc/bash_completion.d/azure-cli
 source ~/.hass
 source ~/.tokens
 source $HOME/.config/aliases.zsh
@@ -171,6 +157,7 @@ LS_COLORS=$LS_COLORS:'ow=1;41;30:'
 export LS_COLORS
 export PATH=$HOME/.config/rofi/scripts:$PATH
 export TERMINAL=$HOME/.cargo/bin/alacritty
+export TERM=alacritty
 export LD_LIBRARY_PATH=/usr/local/lib
 
 export ZPLUG_HOME=$HOME/.config/zplug
@@ -195,12 +182,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# For ESP Rust development
-export LIBCLANG_PATH="/home/tyler/.espressif/tools/xtensa-esp32-elf-clang/esp-15.0.0-20221201-x86_64-unknown-linux-gnu/esp-clang/lib/"
-export PATH="/home/tyler/.espressif/tools/xtensa-esp32-elf-gcc/8_4_0-esp-2021r2-patch3-x86_64-unknown-linux-gnu/bin/:/home/tyler/.espressif/tools/xtensa-esp32s2-elf-gcc/8_4_0-esp-2021r2-patch3-x86_64-unknown-linux-gnu/bin/:/home/tyler/.espressif/tools/xtensa-esp32s3-elf-gcc/8_4_0-esp-2021r2-patch3-x86_64-unknown-linux-gnu/bin/:$PATH"
-
 export WORKON_HOME="$HOME/.virtualenvs/"
-source $(pew shell_config)
 
 
 # Shell-GPT integration ZSH v0.1
@@ -218,3 +200,7 @@ bindkey ^y _sgpt_zsh
 ### Task warrior Settings
 export TASKRC=$XDG_CONFIG_HOME/.taskrc
 
+# To customize prompt, run `p10k configure` or edit ~/.config/.p10k.zsh.
+[[ ! -f ~/.config/.p10k.zsh ]] || source ~/.config/.p10k.zsh
+
+export GPG_TTY=$(tty)
