@@ -1,0 +1,332 @@
+{
+    "streamdeck_ui_version": 1,
+    "state": {
+        "AL47J2C02473": {
+            "buttons": {
+                "0": {
+                    "0": {
+                        "brightness_change": 0,
+                        "write": "",
+                        "command": "hass-cli state toggle switch.desk_bar",
+                        "text": "Desk Bar",
+                        "keys": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "1": {
+                        "keys": "",
+                        "command": "hass-cli state toggle light.desk_lightstrip",
+                        "text": "Light Strip",
+                        "icon": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "2": {
+                        "keys": "",
+                        "text": "",
+                        "command": "xdotool search --name '.+Obsidian.+' windowactivate",
+                        "icon": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "3": {
+                        "command": "",
+                        "text": "",
+                        "icon": "",
+                        "switch_page": 2,
+                        "text_vertical_align": "middle-bottom"
+                    },
+                    "4": {
+                        "switch_page": 3,
+                        "icon": ""
+                    },
+                    "5": {
+                        "command": "",
+                        "text": "",
+                        "icon": ""
+                    },
+                    "6": {
+                        "command": "",
+                        "text": "",
+                        "keys": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "7": {
+                        "command": "",
+                        "text": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "8": {
+                        "command": "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause",
+                        "text": "Play/Pause",
+                        "text_vertical_align": "middle"
+                    },
+                    "9": {
+                        "command": "",
+                        "text": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "10": {
+                        "command": "",
+                        "text": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "11": {
+                        "command": "",
+                        "text": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "12": {
+                        "text": "",
+                        "command": "bash /home/tyler/.config/scripts/toggle-airpods-bt-con.sh",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/tyler/.config/streamdeck/icons/airpods.png"
+                    },
+                    "13": {
+                        "icon": "/home/tyler/.config/streamdeck/icons/speaker-xxl.png",
+                        "command": "zsh -c \"pactl set-card-profile alsa_card.pci-0000_2d_00.4 output:iec958-stereo && pactl set-default-sink alsa_output.pci-0000_2d_00.4.iec958-stereo.2\""
+                    },
+                    "14": {
+                        "text": "Headphones",
+                        "command": "zsh -c \"pactl set-card-profile alsa_card.pci-0000_2b_00.1 output:hdmi-stereo && pactl set-default-sink alsa_output.pci-0000_2b_00.1.hdmi-stereo\"",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/tyler/Applications/Streamdeck/icons/headphones-solid.svg"
+                    }
+                },
+                "1": {
+                    "0": {
+                        "command": "",
+                        "text": "",
+                        "switch_page": 1,
+                        "icon": "/home/tyler/Applications/Streamdeck/icons/arrow-left-solid.png"
+                    },
+                    "1": {
+                        "command": "hass-cli state toggle light.desk_lightstrip",
+                        "text": "Light Strip",
+                        "text_vertical_align": "middle"
+                    },
+                    "2": {
+                        "command": "",
+                        "text": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "3": {
+                        "text": "",
+                        "text_vertical_align": "middle",
+                        "command": ""
+                    },
+                    "4": {
+                        "text": "",
+                        "command": "",
+                        "text_vertical_align": "middle"
+                    },
+                    "5": {},
+                    "6": {
+                        "text": "Desk Bar",
+                        "command": "hass-cli state toggle switch.desk_bar",
+                        "text_vertical_align": "middle"
+                    },
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {
+                        "text": "Open",
+                        "command": "hass-cli state turn_on switch.DirectionPinOne",
+                        "text_vertical_align": "middle"
+                    },
+                    "12": {
+                        "command": "hass-cli state turn_off switch.DirectionPinOne switch.DirectionPinTwo",
+                        "text": "Stop",
+                        "text_vertical_align": "middle"
+                    },
+                    "13": {
+                        "text": "Close",
+                        "command": "hass-cli state turn_on switch.DirectionPinTwo",
+                        "text_vertical_align": "middle"
+                    },
+                    "14": {}
+                },
+                "2": {
+                    "0": {
+                        "switch_page": 1,
+                        "icon": "/home/tyler/Applications/Streamdeck/icons/arrow-left-solid.png"
+                    },
+                    "1": {},
+                    "2": {},
+                    "3": {
+                        "text": "Shuffle",
+                        "command": "rhythmbox-client --shuffle",
+                        "text_vertical_align": "middle"
+                    },
+                    "4": {
+                        "text": "No Shuffle",
+                        "command": "rhythmbox-client --no-shuffle",
+                        "text_vertical_align": "middle"
+                    },
+                    "5": {},
+                    "6": {
+                        "command": "rhythmbox-client --previous",
+                        "text": "Prev",
+                        "text_vertical_align": "middle"
+                    },
+                    "7": {
+                        "text": "Play / Pause",
+                        "command": "rhythmbox-client --play-pause",
+                        "text_vertical_align": "middle"
+                    },
+                    "8": {
+                        "command": "rhythmbox-client --next",
+                        "text": "Next",
+                        "text_vertical_align": "middle"
+                    },
+                    "9": {},
+                    "10": {
+                        "command": "rhythmbox-client --set-rating 1",
+                        "text": "1",
+                        "text_vertical_align": "middle-bottom"
+                    },
+                    "11": {
+                        "command": "rhythmbox-client --set-rating 2",
+                        "text": "2",
+                        "text_vertical_align": "middle-bottom"
+                    },
+                    "12": {
+                        "command": "rhythmbox-client --set-rating 3",
+                        "text": "3",
+                        "text_vertical_align": "middle-bottom"
+                    },
+                    "13": {
+                        "command": "rhythmbox-client --set-rating 4",
+                        "text": "4",
+                        "text_vertical_align": "middle-bottom"
+                    },
+                    "14": {
+                        "command": "rhythmbox-client --set-rating 5",
+                        "text": "5",
+                        "text_vertical_align": "middle-bottom"
+                    }
+                },
+                "3": {
+                    "0": {},
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                },
+                "4": {
+                    "0": {},
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                },
+                "5": {
+                    "0": {},
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                },
+                "6": {
+                    "0": {},
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                },
+                "7": {
+                    "0": {},
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                },
+                "8": {
+                    "0": {},
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                },
+                "9": {
+                    "0": {},
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                }
+            },
+            "page": 0,
+            "display_timeout": 3600,
+            "brightness": 99
+        }
+    }
+}
