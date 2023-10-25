@@ -1,23 +1,34 @@
-########################################################
-#                               Hello! 
-#             Welcome, you're likely here because you borked another install! Good Job! (idiot)
-#             I've done it enough times to know I should automate this. So here is the script to get you back up and running.
-
-# Symlink the files here to the .config directory
 #!/usr/bin/env zsh
+################################################################################################################
+#                               Hello! 
+#     Welcome, you're likely here because you borked another install! Good Job! (idiot)
+#     I've done it enough times to know I should automate this. So here is the script to get you back up and running.
+#
+################################################################################################################
 
-# Fetch the list of directories in the current directory
-dirs=( */ )
+##### Symlink the files here to the .config directory #########
 
-# Remove trailing slashes from directory names
-dirs=(${dirs%/})
+# Items (directories or files) to be symlinked to ~/.config
+config_items=( * )
 
-# Iterate over the directories and create symlinks
-for dir in $dirs; do
-  if [[ -d $dir ]]; then
-    ln -s $PWD/$dir ~/.config_test/
-  else
-    echo "Warning: Directory $dir not found in current directory."
-  fi
+# Specific files to be symlinked directly into ~/
+home_items=( .zshenv .Xresources )
+
+# Symlink items to ~/.config
+for item in "${config_items[@]}"; do
+    if [[ -e $item ]]; then  # The condition checks if the item exists and is not in the home_items list
+        ln -s "$PWD/$item" ~/.config_test/
+    else
+      echo "Warning: Directory $item not found in current directory."
+    fi
+done
+
+# Symlink specific files to ~/
+for item in "${home_items[@]}"; do
+    if [[ -e $item ]]; then
+        ln -s "$PWD/$item" ~/home_test
+    else
+      echo "Warning: File $item not found in current directory."
+    fi
 done
 
