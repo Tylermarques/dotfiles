@@ -17,7 +17,11 @@ home_items=( .zshenv .Xresources )
 # Symlink items to ~/.config
 for item in "${config_items[@]}"; do
     if [[ -e $item ]]; then  # The condition checks if the item exists and is not in the home_items list
-        ln -s "$PWD/$item" ~/.config_test/
+        if [[ -e ~/.config/$item || -L ~/.config/$item ]]
+            echo "Error: ~/.config/$item already exists, refusing to overwrite"
+        else
+            ln -s "$PWD/$item" ~/.config/
+        fi
     else
       echo "Warning: Directory $item not found in current directory."
     fi
@@ -26,7 +30,11 @@ done
 # Symlink specific files to ~/
 for item in "${home_items[@]}"; do
     if [[ -e $item ]]; then
-        ln -s "$PWD/$item" ~/home_test
+        if [[ -e ~/$item || -L ~/$item ]]
+            echo "Error: ~/$item already exists, refusing to overwrite"
+        else
+            ln -s "$PWD/$item" ~/
+        fi
     else
       echo "Warning: File $item not found in current directory."
     fi
