@@ -424,7 +424,11 @@ set -g @plugin 'sainnhe/tmux-fzf'
 #set -g @plugin 'tmux-plugins/tmux-resurrect'
 #set -g @plugin 'tmux-plugins/tmux-continuum'
 #set -g @continuum-restore 'on'
+set -g @plugin 'joshmedeski/t-smart-tmux-session-manager'
 
+# Recommended from t-smart-tmux-session-manager
+bind-key x kill-pane # skip "kill-pane 1? (y/n)" prompt
+set -g detach-on-destroy off  # don't exit from tmux when closing a session
 
 # -- custom variables ----------------------------------------------------------
 

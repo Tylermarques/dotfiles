@@ -204,3 +204,12 @@ export TASKRC=$XDG_CONFIG_HOME/.taskrc
 [[ ! -f ~/.config/.p10k.zsh ]] || source ~/.config/.p10k.zsh
 
 export GPG_TTY=$(tty)
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/tyler/foss/gcp-cli/google-cloud-sdk/path.zsh.inc' ]; then . '/home/tyler/foss/gcp-cli/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/tyler/foss/gcp-cli/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/tyler/foss/gcp-cli/google-cloud-sdk/completion.zsh.inc'; fi
+
+# For t-smart-tmux-session-manager
+export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
