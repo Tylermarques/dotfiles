@@ -13,7 +13,9 @@
 ##### Symlink the files here to the .config directory #########
 
 # Items (directories or files) to be symlinked to ~/.config
-config_items=( * )
+config_items=( * .* )
+config_items=(${config_items:#.})   # Remove '.' from the list
+config_items=(${config_items:#..})  # Remove '..' from the list
 
 # Specific files to be symlinked directly into ~/
 home_items=( .zshenv .Xresources )

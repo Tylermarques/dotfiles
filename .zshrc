@@ -213,3 +213,11 @@ if [ -f '/home/tyler/foss/gcp-cli/google-cloud-sdk/completion.zsh.inc' ]; then .
 
 # For t-smart-tmux-session-manager
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
+
+# Pyenv environment
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+eval "$(pyenv virtualenv-init -)"
+

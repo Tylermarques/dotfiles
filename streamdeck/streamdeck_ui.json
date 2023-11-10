@@ -81,11 +81,11 @@
                     },
                     "13": {
                         "icon": "/home/tyler/.config/streamdeck/icons/speaker-xxl.png",
-                        "command": "zsh -c \"pactl set-card-profile alsa_card.pci-0000_2d_00.4 output:iec958-stereo && pactl set-default-sink alsa_output.pci-0000_2d_00.4.iec958-stereo.2\""
+                        "command": "zsh -c \"pactl list short sinks | grep iec958 | head -n 1 | cut -f1 | xargs -I % pactl set-default-sink %\""
                     },
                     "14": {
                         "text": "Headphones",
-                        "command": "zsh -c \"pactl set-card-profile alsa_card.pci-0000_2b_00.1 output:hdmi-stereo && pactl set-default-sink alsa_output.pci-0000_2b_00.1.hdmi-stereo\"",
+                        "command": "pactl list sinks | grep hdmi | head -n 1 | cut -f1 | xargs -I {} \"pactl set-default-sink {}\"",
                         "text_vertical_align": "middle",
                         "icon": "/home/tyler/Applications/Streamdeck/icons/headphones-solid.svg"
                     }

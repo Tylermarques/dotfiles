@@ -805,5 +805,5 @@ key_bindings:
   - {key: Home, mods: Shift, action: ScrollToTop, mode: ~Alt}
   - {key: End, mods: Shift, action: ScrollToBottom, mode: ~Alt}
   # - { key: F, mods: Control, command: {program: "zsh", args:["-c", "tx"]}  }
-  - {key: O, mods: Control, chars: "tx\n"}
+  - { key: O, mods: Control, chars: "tx\n"}
   - { key: F, mods: Control, chars: "\x02\x54" }
