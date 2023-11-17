@@ -157,7 +157,6 @@ LS_COLORS=$LS_COLORS:'ow=1;41;30:'
 export LS_COLORS
 export PATH=$HOME/.config/rofi/scripts:$PATH
 export TERMINAL=$HOME/.cargo/bin/alacritty
-export TERM=alacritty
 export LD_LIBRARY_PATH=/usr/local/lib
 
 export ZPLUG_HOME=$HOME/.config/zplug
