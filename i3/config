@@ -28,15 +28,12 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id ~/.screenlayout/main.sh
 
 
-include $HOME/.config/i3/*.conf
-
-
 # Launch polybar
 exec_always --no-startup-id /home/tyler/.config/polybar/launch.sh
 
 
-exec_always killall streamdeck
-exec_always /home/tyler/.local/bin/streamdeck --no-ui 
+exec_always --no-startup-id killall streamdeck
+exec_always --no-startup-id /home/tyler/.local/bin/streamdeck
 exec firefox
 exec slack
 exec obsidian
@@ -47,4 +44,5 @@ exec --no-startup-id betterlockscreen -w dim
 # Alternative (set last used background)
 exec --no-startup-id source ~/.fehbg
 
+include $HOME/.config/i3/*.conf
 

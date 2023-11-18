@@ -120,6 +120,7 @@ openrazer/
 polychromatic/
 privateinternetaccess/
 tmux/plugins/
+!tmux/plugins/tpm
 zoxide.zsh
 *.log
 **/cache/
