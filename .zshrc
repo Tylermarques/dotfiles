@@ -220,3 +220,7 @@ eval "$(pyenv init -)"
 
 eval "$(pyenv virtualenv-init -)"
 
+
+## AWS-Vault Configuration
+
+AWS_VAULT_BACKEND=pass
