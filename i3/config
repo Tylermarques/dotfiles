@@ -31,7 +31,9 @@ exec --no-startup-id ~/.screenlayout/main.sh
 # Launch polybar
 exec_always --no-startup-id /home/tyler/.config/polybar/launch.sh
 
+exec --no-startup-id dunst
 
+exec_always --no-startup-id /home/tyler/.config/streamdeck/launch.sh
 exec firefox
 exec slack
 exec obsidian
@@ -40,7 +42,7 @@ exec obsidian
 exec --no-startup-id betterlockscreen -w dim
 
 # Alternative (set last used background)
-# exec --no-startup-id source ~/.fehbg
+exec --no-startup-id source ~/.fehbg
 
 include $HOME/.config/i3/*.conf
 

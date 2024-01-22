@@ -39,4 +39,4 @@ alias album='mpc list album | fzf -m | while read album; do mpc searchadd album 
 alias artist='mpc list artist | fzf -m | while read artist; do mpc searchadd artist "$artist"; done'
 alias song='mpc search title "" | fzf -m | mpc add'
 alias tw='taskwarrior-tui'
-alias install='sudo pacman -S'
+alias install='sudo pacman -Sy && sudo pacman -S'

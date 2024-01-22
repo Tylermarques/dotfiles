@@ -30,7 +30,9 @@ for item in "${config_items[@]}"; do
                 echo "Error: ~/.config/$item already exists, refusing to overwrite"
             fi
         else
-            ln -s "$PWD/$item" ~/.config/
+            ln -s "$PWD/$item" ~/.config/;
+            echo "SUCCESS: Symlinked $item to ~/.config"
+
         fi
     else
       echo "Warning: Directory $item not found in current directory."
@@ -48,6 +50,7 @@ for item in "${home_items[@]}"; do
             fi
         else
             ln -s "$PWD/$item" ~/
+            echo "SUCCESS: Symlinked $item to home"
         fi
     else
       echo "Warning: File $item not found in current directory."
