@@ -64,7 +64,7 @@ tray-position = right
 
 modules-left = workspaces xkillapp settings appfilemanager mediaplayer
 modules-center = date media
-modules-right = temperature memory memoryswap cpu brightness sound wifi powermenu
+modules-right = temperature memory memoryswap cpu sound 
 
 
 ;Date correction
