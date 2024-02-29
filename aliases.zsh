@@ -40,3 +40,5 @@ alias artist='mpc list artist | fzf -m | while read artist; do mpc searchadd art
 alias song='mpc search title "" | fzf -m | mpc add'
 alias tw='taskwarrior-tui'
 alias install='sudo pacman -Sy && sudo pacman -S'
+alias td='todoist'
+alias dc='docker compose'
