@@ -1,0 +1,36 @@
+[user]
+	email = tylermarques@gmail.com
+	name = Tyler Marques
+	signingkey = me@tylermarques.com
+	email = me@tylermarques.com
+[core]
+	autocrlf = input
+[init]
+	defaultBranch = main
+[diff]
+	tool = vimdiff
+	external = difft
+[commit]
+	gpgsign = true
+
+[merge]
+	tool = "nvim"
+	conflictStyle = zdiff3
+
+[mergetool]
+	keepBackup = false
+	prompt = false
+
+[mergetool "nvim"]
+	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+
+[gpg]
+	program = /usr/bin/gpg
+[safe]
+	directory = /home/tyler/Projects/plai-labs/PlaiGenerationAPI/ComfyUI/custom_nodes/ComfyUI_smZNodes
+	directory = /home/tyler/Projects/plai-labs/PlaiGenerationAPI/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite
+	directory = /home/tyler/Projects/plai-labs/PlaiGenerationAPI/ComfyUI/custom_nodes/comfy_mtb
+[credential]
+	helper = cache
+
+

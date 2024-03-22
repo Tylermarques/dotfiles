@@ -18,7 +18,7 @@ config_items=(${config_items:#.})   # Remove '.' from the list
 config_items=(${config_items:#..})  # Remove '..' from the list
 
 # Specific files to be symlinked directly into ~/
-home_items=( .zshenv .Xresources )
+home_items=( .zshenv .Xresources .gitconfig )
 
 # Symlink items to ~/.config
 for item in "${config_items[@]}"; do

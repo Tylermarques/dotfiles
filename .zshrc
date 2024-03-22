@@ -184,18 +184,20 @@ unset __conda_setup
 export WORKON_HOME="$HOME/.virtualenvs/"
 
 
-# Shell-GPT integration ZSH v0.1
+# Shell-GPT integration ZSH v0.2
 _sgpt_zsh() {
+if [[ -n "$BUFFER" ]]; then
     _sgpt_prev_cmd=$BUFFER
     BUFFER+="⌛"
     zle -I && zle redisplay
-    BUFFER=$(sgpt --shell <<< "$_sgpt_prev_cmd")
+    BUFFER=$(sgpt --shell <<< "$_sgpt_prev_cmd" --no-interaction)
     zle end-of-line
+fi
 }
 zle -N _sgpt_zsh
 bindkey ^y _sgpt_zsh
-# Shell-GPT integration ZSH v0.1
-
+# Shell-GPT integration ZSH v0.2
+#
 ### Task warrior Settings
 export TASKRC=$XDG_CONFIG_HOME/.taskrc
 
