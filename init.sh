@@ -17,12 +17,17 @@ config_items=( * .* )
 config_items=(${config_items:#.})   # Remove '.' from the list
 config_items=(${config_items:#..})  # Remove '..' from the list
 
+# Directories to ignore when symlinking
+ignored_dirs=(.git)
+
 # Specific files to be symlinked directly into ~/
 home_items=( .zshenv .Xresources .gitconfig )
 
 # Symlink items to ~/.config
 for item in "${config_items[@]}"; do
     if [[ -e $item ]]; then  # The condition checks if the item exists and is not in the home_items list
+    # Check if item exists and is not in the ignored directories list
+    if [[ ! "${ignored_dirs[@]}" =~ $item ]]; then
         if [[ -e ~/.config/$item ]]; then
             if [[ -L ~/.config/$item ]]; then
                 echo "Warn: ~/.config/$item symlink already exists"
@@ -32,7 +37,6 @@ for item in "${config_items[@]}"; do
         else
             ln -s "$PWD/$item" ~/.config/;
             echo "SUCCESS: Symlinked $item to ~/.config"
-
         fi
     else
       echo "Warning: Directory $item not found in current directory."

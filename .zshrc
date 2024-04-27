@@ -149,7 +149,7 @@ export PATH="$PATH:$HOME/.dotnet"
 source ~/.hass
 source ~/.tokens
 source $HOME/.config/aliases.zsh
-source $HOME/.config/zoxide.zsh
+eval "$(zoxide init zsh)"
 
 
 export ANSIBLE_CONFIG=$HOME/.config/ansible/ansible.cfg
