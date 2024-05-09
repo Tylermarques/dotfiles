@@ -123,12 +123,6 @@ key = "End"
 mode = "~Alt"
 mods = "Shift"
 
-[[keyboard.bindings]]
-chars = """
-tx
-"""
-key = "O"
-mods = "Control"
 
 [[keyboard.bindings]]
 chars = "\u0002t\r"
