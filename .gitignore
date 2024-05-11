@@ -1,5 +1,4 @@
 .zcompdump*
-ansible
 appimagelauncher.cfg
 autostart
 azure-datalake-store

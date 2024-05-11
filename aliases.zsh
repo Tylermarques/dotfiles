@@ -44,4 +44,3 @@ alias td='todoist-cli'
 alias dc='docker compose'
 alias install='sudo pacman -S'
 alias cd='z'
-alias ansible="ansible-community"
