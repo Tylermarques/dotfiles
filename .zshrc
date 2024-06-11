@@ -77,7 +77,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git aws fzf zsh-autosuggestions zsh-syntax-highlighting docker docker-compose kubectl poetry)
+plugins=(git aws fzf zsh-autosuggestions zsh-syntax-highlighting docker docker-compose kubectl poetry direnv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -276,3 +276,7 @@ eval "$(pyenv virtualenv-init -)"
 ## AWS-Vault Configuration
 
 AWS_VAULT_BACKEND=pass
+
+
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

@@ -126,4 +126,5 @@ zoxide.zsh
 **/Cache/
 **/*cache/
 **/*Cache/
-
+gh/hosts.yml
+todoist/config.json

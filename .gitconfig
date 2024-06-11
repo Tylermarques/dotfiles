@@ -1,10 +1,11 @@
 [user]
-	email = tylermarques@gmail.com
 	name = Tyler Marques
 	signingkey = me@tylermarques.com
 	email = me@tylermarques.com
 [core]
 	autocrlf = input
+	pager = diff-so-fancy | less --tabs=4 -RF
+	excludesfile = /home/tyler/dotfiles/git/ignore
 [init]
 	defaultBranch = main
 [diff]
@@ -26,11 +27,22 @@
 
 [gpg]
 	program = /usr/bin/gpg
-[safe]
-	directory = /home/tyler/Projects/plai-labs/PlaiGenerationAPI/ComfyUI/custom_nodes/ComfyUI_smZNodes
-	directory = /home/tyler/Projects/plai-labs/PlaiGenerationAPI/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite
-	directory = /home/tyler/Projects/plai-labs/PlaiGenerationAPI/ComfyUI/custom_nodes/comfy_mtb
 [credential]
 	helper = cache
 
 
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	func = 146 bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
