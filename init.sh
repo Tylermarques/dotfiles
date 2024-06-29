@@ -25,21 +25,22 @@ home_items=( .zshenv .Xresources .gitconfig )
 
 # Symlink items to ~/.config
 for item in "${config_items[@]}"; do
-    if [[ -e $item ]]; then  # The condition checks if the item exists and is not in the home_items list
-    # Check if item exists and is not in the ignored directories list
-    if [[ ! "${ignored_dirs[@]}" =~ $item ]]; then
-        if [[ -e ~/.config/$item ]]; then
-            if [[ -L ~/.config/$item ]]; then
-                echo "Warn: ~/.config/$item symlink already exists"
+    if [[ -e $item ]]; then
+        # Check if item exists and is not in the ignored directories list
+        if [[ ! " ${ignored_dirs[@]} " =~ " $item " ]]; then
+            if [[ -e ~/.config/$item ]]; then
+                if [[ -L ~/.config/$item ]]; then
+                    echo "Warn: ~/.config/$item symlink already exists"
+                else
+                    echo "Error: ~/.config/$item already exists, refusing to overwrite"
+                fi
             else
-                echo "Error: ~/.config/$item already exists, refusing to overwrite"
+                ln -s "$PWD/$item" ~/.config/
+                echo "SUCCESS: Symlinked $item to ~/.config"
             fi
-        else
-            ln -s "$PWD/$item" ~/.config/;
-            echo "SUCCESS: Symlinked $item to ~/.config"
         fi
     else
-      echo "Warning: Directory $item not found in current directory."
+        echo "Warning: Item $item not found in current directory."
     fi
 done
 
@@ -57,8 +58,6 @@ for item in "${home_items[@]}"; do
             echo "SUCCESS: Symlinked $item to home"
         fi
     else
-      echo "Warning: File $item not found in current directory."
+        echo "Warning: File $item not found in current directory."
     fi
 done
-
-
