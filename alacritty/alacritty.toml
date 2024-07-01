@@ -29,23 +29,19 @@ foreground = "#D8DEE9"
 TERM = "xterm-256color"
 
 [font]
-size = 9.0
+size = 10.0
 
 [font.bold]
-family = "JetBrains Mono Nerd Font"
-style = "Bold"
+family = "JetBrainsMono Nerd Font"
 
 [font.bold_italic]
-family = "JetBrains Mono Nerd Font"
-style = "Bold Italic"
+family = "JetBrainsMono Nerd Font"
 
 [font.italic]
-family = "JetBrains Mono Nerd Font"
-style = "Italic"
+family = "JetBrainsMono Nerd Font"
 
 [font.normal]
-family = "JetBrains Mono Nerd Font"
-style = "Regular"
+family = "JetBrainsMono Nerd Font"
 
 [font.offset]
 x = 0
@@ -133,13 +129,14 @@ mods = "Control|Shift"
 history = 5000
 
 [shell]
-args = ["-i", "-c", "tmux attach || tmux -f ~/.config/tmux/tmux.conf"]
 program = "/bin/zsh"
+args = ["-i", "-c", "tmux attach || tmux -f ~/.config/tmux/tmux.conf"]
 
 [window]
 dynamic_padding = false
 opacity = 1.0
 title = "Alacritty"
+option_as_alt = "OnlyLeft"
 
 [window.class]
 general = "Alacritty"
