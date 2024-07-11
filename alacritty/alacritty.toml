@@ -29,7 +29,7 @@ foreground = "#D8DEE9"
 TERM = "xterm-256color"
 
 [font]
-size = 10.0
+size = 8
 
 [font.bold]
 family = "JetBrainsMono Nerd Font"
@@ -120,10 +120,10 @@ mode = "~Alt"
 mods = "Shift"
 
 
-[[keyboard.bindings]]
-chars = "\u0002t\r"
-key = "F"
-mods = "Control|Shift"
+# [[keyboard.bindings]]
+# chars = "\u0002t\r"
+# key = "F"
+# mods = "Control|Shift"
 
 [scrolling]
 history = 5000
