@@ -1,7 +1,7 @@
 [user]
 	name = Tyler Marques
 	signingkey = me@tylermarques.com
-	email = me@tylermarques.com
+	email = tyler.marques@plailabs.com
 [core]
 	autocrlf = input
 	pager = diff-so-fancy | less --tabs=4 -RF
