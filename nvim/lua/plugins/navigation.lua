@@ -16,4 +16,7 @@ return {
       vim.keymap.set("n", "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
     end,
   },
+  {
+    "tris203/precognition.nvim",
+  },
 }
