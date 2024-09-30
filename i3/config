@@ -36,6 +36,8 @@ exec /home/tyler/.config/streamdeck/launch.sh
 exec firefox
 exec slack
 exec obsidian
+exec thunderbird
+exec spotify
 
 # set desktop background with custom effect
 exec --no-startup-id betterlockscreen -w dim

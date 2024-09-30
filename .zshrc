@@ -187,6 +187,7 @@ export PATH="$PATH:/opt/mssql-tools/bin"
 
 ## Cargo (rust) bin bath
 export PATH=$PATH:$HOME/.cargo/bin
+source $HOME/.cargo/env 
 
 #### Node / NVM setup ####
 export NVM_DIR="$HOME/.nvm"
@@ -283,3 +284,12 @@ export PATH=$PATH:$HOME/go/bin
 
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}

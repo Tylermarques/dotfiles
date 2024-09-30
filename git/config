@@ -4,19 +4,28 @@
 	email = tyler.marques@plailabs.com
 [core]
 	autocrlf = input
-	pager = diff-so-fancy | less --tabs=4 -RF
-	excludesfile = /home/tyler/dotfiles/git/ignore
+	pager = delta
+  excludesfile = /home/tyler/dotfiles/git/ignore
 [init]
 	defaultBranch = main
 [diff]
 	tool = vimdiff
-	external = difft
+  colorMoved = default
 [commit]
 	gpgsign = true
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    line-numbers = true
+    side-by-side= true
+    navigate = true    # use n and N to move between diff sections
 
+    # delta detects terminal colors automatically; set one of these to disable auto-detection
+    # dark = true
+    # light = true
 [merge]
 	tool = "nvim"
-	conflictStyle = zdiff3
+  conflictstyle = diff3
 
 [mergetool]
 	keepBackup = false
@@ -46,3 +55,7 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+[push]
+	autoSetupRemote = true
+[pull]
+	rebase = true
