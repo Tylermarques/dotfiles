@@ -1,0 +1,2 @@
+command = "/bin/zsh -i -c 'tmux attach'"
+wait-after-command=true
