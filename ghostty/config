@@ -1,2 +1,15 @@
-command = "/bin/zsh -i -c 'tmux attach'"
-wait-after-command=true
+# Command used at startup to connect to tmux
+command = "/bin/zsh -i -c 'tmux attach || tmux -f ~/.config/tmux/tmux.conf'"  
+
+font-size = 10
+
+# Remove the top titlebar
+gtk-titlebar= false
+
+# Remove as much decoration as possible
+window-decoration = false         
+
+# Don't ask if I want to close
+confirm-close-surface = false     
+
+resize-overlay = never
