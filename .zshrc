@@ -192,9 +192,16 @@ source $HOME/.cargo/env
 #### Node / NVM setup ####
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+export PATH=~/.npm-global/bin:$PATH
 
 alias node='unalias node ; unalias npm ; nvm use default ; node $@'
 alias npm='unalias node ; unalias npm ; nvm use default ; npm $@'
+
+export PNPM_HOME="/home/tyler/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
 
 #### Dotnet
 export PATH="$PATH:$HOME/.dotnet"

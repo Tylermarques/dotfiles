@@ -1,7 +1,7 @@
 [user]
 	name = Tyler Marques
 	signingkey = me@tylermarques.com
-	email = tyler.marques@plailabs.com
+	email = me@tylermarques.com
 [core]
 	autocrlf = input
 	pager = delta
