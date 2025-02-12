@@ -38,6 +38,7 @@ exec slack
 exec obsidian
 exec thunderbird
 exec spotify
+exec todoist
 
 # set desktop background with custom effect
 exec --no-startup-id betterlockscreen -w dim
