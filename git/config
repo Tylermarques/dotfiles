@@ -2,19 +2,29 @@
 	name = Tyler Marques
 	signingkey = me@tylermarques.com
 	email = me@tylermarques.com
+
 [core]
 	autocrlf = input
 	pager = delta
   excludesfile = /home/tyler/dotfiles/git/ignore
 [init]
 	defaultBranch = main
+
+[branch]
+	sort = -committerdate
+
 [diff]
 	tool = vimdiff
-  colorMoved = default
+	colorMoved = plain
+  algorithm = histogram
+
 [commit]
 	gpgsign = true
+	verbose = true
+
 [interactive]
     diffFilter = delta --color-only
+
 [delta]
     line-numbers = true
     side-by-side= true
@@ -25,7 +35,7 @@
     # light = true
 [merge]
 	tool = "nvim"
-  conflictstyle = diff3
+  conflictstyle = zdiff3
 
 [mergetool]
 	keepBackup = false
@@ -36,17 +46,19 @@
 
 [gpg]
 	program = /usr/bin/gpg
+
 [credential]
 	helper = cache
 
-
 [color]
 	ui = true
+
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
+
 [color "diff"]
 	meta = 11
 	frag = magenta bold
@@ -55,7 +67,27 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+
 [push]
 	autoSetupRemote = true
+	followTags = true
+
 [pull]
 	rebase = true
+[tag]
+	sort = version:refname
+[column]
+	ui = auto
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[help]
+	autocorrect = prompt
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
