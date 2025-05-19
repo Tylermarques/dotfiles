@@ -15,7 +15,7 @@ export ZSH="$HOME/.config/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="powerlevel10k/powerlevel10k" # set by `omz`
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -216,7 +216,6 @@ export ANSIBLE_CONFIG=$HOME/.config/ansible/ansible.cfg
 LS_COLORS=$LS_COLORS:'ow=1;41;30:'
 export LS_COLORS
 export PATH=$HOME/.config/rofi/scripts:$PATH
-export TERMINAL=$HOME/.cargo/bin/alacritty
 export LD_LIBRARY_PATH=/usr/local/lib
 
 export ZPLUG_HOME=$HOME/.config/zplug
@@ -266,12 +265,6 @@ export TASKRC=$XDG_CONFIG_HOME/.taskrc
 
 export GPG_TTY=$(tty)
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/tyler/foss/gcp-cli/google-cloud-sdk/path.zsh.inc' ]; then . '/home/tyler/foss/gcp-cli/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/tyler/foss/gcp-cli/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/tyler/foss/gcp-cli/google-cloud-sdk/completion.zsh.inc'; fi
-
 # For t-smart-tmux-session-manager
 export PATH=$HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
 
@@ -303,3 +296,12 @@ function yy() {
 	rm -f -- "$tmp"
 }
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/tyler/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tyler/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/tyler/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tyler/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# MacPorts Path varaible
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
