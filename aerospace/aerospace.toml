@@ -218,6 +218,7 @@ shift-down = ['volume set 0', 'mode main']
 5 = 'built-in'
 O = 'secondary'
 N = 'secondary'
+8 = 'secondary'
 
 
 [[on-window-detected]]

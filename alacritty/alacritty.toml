@@ -29,7 +29,7 @@ foreground = "#D8DEE9"
 TERM = "xterm-256color"
 
 [font]
-size = 8.5
+size = 14
 
 [font.bold]
 family = "JetBrainsMono Nerd Font"
@@ -107,6 +107,17 @@ chars = "\f"
 key = "L"
 mods = "Control"
 
+# Tmux window/session switching
+[[keyboard.bindings]]
+chars = "\u0009"
+key = "Tab"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001b[Z"
+key = "Tab"
+mods = "Control|Shift"
+
 [[keyboard.bindings]]
 action = "ScrollToTop"
 key = "Home"
@@ -128,15 +139,13 @@ mods = "Shift"
 [scrolling]
 history = 5000
 
-[terminal.shell]
-program = "/bin/zsh"
-args = ["-i", "-c", "tmux attach || tmux -f ~/.config/tmux/tmux.conf"]
 
 [window]
 dynamic_padding = false
 opacity = 1.0
 title = "Alacritty"
 option_as_alt = "OnlyLeft"
+decorations = "none"
 
 [window.class]
 general = "Alacritty"
@@ -147,3 +156,6 @@ x = 1
 y = 1
 
 [terminal]
+[terminal.shell]
+program = "/bin/zsh"
+args = ["-i", "-c", "tmux attach || tmux -f ~/.config/tmux/tmux.conf"]
