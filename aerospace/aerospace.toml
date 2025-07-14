@@ -180,6 +180,9 @@ alt-shift-x = 'move-node-to-workspace X'
 alt-shift-y = 'move-node-to-workspace Y'
 alt-shift-z = 'move-node-to-workspace Z'
 
+"alt-shift-comma" = 'move-workspace-to-monitor left'
+"alt-shift-period" = 'move-workspace-to-monitor right'
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
 
@@ -211,21 +214,21 @@ shift-down = ['volume set 0', 'mode main']
 
 
 [workspace-to-monitor-force-assignment]
-1 = 'secondary'
+1 = '2'
 2 = 'built-in'
 3 = 'built-in'
-4 = 'secondary'
+4 = '2'
 5 = 'built-in'
-O = 'secondary'
-N = 'secondary'
-8 = 'secondary'
+O = '2'
+N = '2'
+8 = '2'
 
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'music'
 run = ['move-node-to-workspace 2']
 [[on-window-detected]]
-if.app-name-regex-substring = 'ghostty'
+if.app-name-regex-substring = 'alacritty'
 run = ['move-node-to-workspace 4']
 
 [[on-window-detected]]

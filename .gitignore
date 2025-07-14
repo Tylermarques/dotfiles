@@ -128,3 +128,5 @@ zoxide.zsh
 **/*Cache/
 gh/hosts.yml
 todoist/config.json
+
+**/.DS_Store

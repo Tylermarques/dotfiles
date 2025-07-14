@@ -21,7 +21,7 @@ config_items=(${config_items:#..})  # Remove '..' from the list
 ignored_dirs=(.git)
 
 # Specific files to be symlinked directly into ~/
-home_items=( .zshenv .Xresources .gitconfig )
+home_items=( .zshenv .Xresources .gitconfig .claude )
 
 # Symlink items to ~/.config
 for item in "${config_items[@]}"; do
@@ -36,7 +36,8 @@ for item in "${config_items[@]}"; do
                 fi
             else
                 ln -s "$PWD/$item" ~/.config/
-                echo "SUCCESS: Symlinked $item to ~/.config"
+                # The success messages are a bit much
+                # echo "SUCCESS: Symlinked $item to ~/.config"
             fi
         fi
     else
@@ -55,7 +56,8 @@ for item in "${home_items[@]}"; do
             fi
         else
             ln -s "$PWD/$item" ~/
-            echo "SUCCESS: Symlinked $item to home"
+            # The success messages are a bit much
+            # echo "SUCCESS: Symlinked $item to home"
         fi
     else
         echo "Warning: File $item not found in current directory."

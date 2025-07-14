@@ -296,10 +296,11 @@ function yy() {
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/tyler/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tyler/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/tyler/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tyler/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/tyler/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tyler/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/tyler/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tyler/google-cloud-sdk/completion.zsh.inc'; fi
 
 # MacPorts Path varaible
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
