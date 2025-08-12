@@ -63,3 +63,8 @@ for item in "${home_items[@]}"; do
         echo "Warning: File $item not found in current directory."
     fi
 done
+
+# Enable the automount of the NFS from Tailscale
+mkdir /mnt/nfs
+systemctl link "$PWD/services/mnt-nfs.automount" "$PWD/services/mnt-nfs.mount";
+systemctl enable --now mnt-nfs.automount
