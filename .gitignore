@@ -130,3 +130,6 @@ gh/hosts.yml
 todoist/config.json
 
 **/.DS_Store
+
+**/__pycache__/
+*.pyc

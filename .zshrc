@@ -153,7 +153,7 @@ _fzf_compgen_dir() {
   fd --type=d --hidden --exclude .git . "$1"
 }
 
-source ~/dotfiles/fzf-git.sh/fzf-git.sh
+source ~/.config/fzf-git.sh/fzf-git.sh
 
 show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
 
@@ -203,7 +203,7 @@ esac
 #### Dotnet
 export PATH="$PATH:$HOME/.dotnet"
 
-source ~/.hass
+[ -s "~/.hass" ] && source ~/.hass
 source ~/.tokens
 source $HOME/.config/aliases.zsh
 eval "$(zoxide init zsh)"
