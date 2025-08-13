@@ -117,7 +117,6 @@ PATH="$HOME/bin:$PATH"
 
 
 autoload -U +X bashcompinit && bashcompinit
-source $ZSH/cache/completions/*
 
 # Setup fzf
 # ---------

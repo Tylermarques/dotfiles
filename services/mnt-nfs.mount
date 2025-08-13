@@ -1,0 +1,14 @@
+[Unit]
+Description=NFS /mnt/nfs from proxmox (Tailscale)
+After=network-online.target nss-lookup.target tailscaled.service
+Wants=network-online.target tailscaled.service
+
+[Mount]
+What=proxmox:/main/plex
+Where=/mnt/nfs
+Type=nfs
+Options=_netdev,vers=4.2,noauto,x-systemd.automount,timeo=14
+
+[Install]
+WantedBy=multi-user.target
+

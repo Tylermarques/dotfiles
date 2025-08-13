@@ -1,0 +1,8 @@
+[Unit]
+Description=Automount /mnt/nfs
+
+[Automount]
+Where=/mnt/nfs
+
+[Install]
+WantedBy=multi-user.target
