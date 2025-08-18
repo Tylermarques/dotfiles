@@ -186,7 +186,6 @@ export PATH="$PATH:/opt/mssql-tools/bin"
 
 ## Cargo (rust) bin bath
 export PATH=$PATH:$HOME/.cargo/bin
-source $HOME/.cargo/env 
 
 #### Node / NVM setup ####
 export NVM_DIR="$HOME/.nvm"
@@ -219,8 +218,6 @@ export ZPLUG_HOME=$HOME/.config/zplug
 
 export XDG_CONFIG_HOME=$HOME/.config
 export PATH=$PATH:$HOME/esp/xtensa-lx106-elf/bin
-
-export RUSTC_WRAPPER=sccache
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
