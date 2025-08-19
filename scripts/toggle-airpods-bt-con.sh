@@ -6,6 +6,8 @@ IS_CONNECTED=$(echo -e "info $DEVICE_MAC\nexit" | bluetoothctl | grep "Connected
 
 if [ "$IS_CONNECTED" == "yes" ]; then
   bluetoothctl disconnect $DEVICE_MAC
+  notify-send "AirPods Pro" "Disconnected" -i audio-headphones
 else
   bluetoothctl connect $DEVICE_MAC
+  notify-send "AirPods Pro" "Connected" -i audio-headphones
 fi
