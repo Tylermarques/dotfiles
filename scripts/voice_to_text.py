@@ -13,6 +13,7 @@ import asyncio
 import base64
 import io
 import logging
+import os
 import subprocess
 import sys
 import time
@@ -32,25 +33,69 @@ DTYPE = "int16"
 CHUNK_SIZE = 1024
 SPEACHES_BASE_URL = "http://localhost:8000"
 MODEL = "Systran/faster-distil-whisper-large-v3"
+# MODEL = "Systran/faster-whisper-small.en"
 
 # VAD Configuration
 SILENCE_THRESHOLD = 0.01  # RMS threshold for silence detection
-SILENCE_DURATION = 2.0    # Seconds of silence before stopping
+SILENCE_DURATION = 1.0  # Seconds of silence before stopping
 MIN_RECORDING_DURATION = 0.5  # Minimum recording duration in seconds
 
 # Logging Configuration
 LOG_FILE = "/tmp/voice_to_text.log"
 
+# Lock file for singleton instance
+LOCK_FILE = "/tmp/voice_to_text.lock"
+
 # Set up logging to both console and file
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[
-        logging.FileHandler(LOG_FILE),
-        logging.StreamHandler(sys.stdout)
-    ]
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.FileHandler(LOG_FILE), logging.StreamHandler(sys.stdout)],
 )
 logger = logging.getLogger(__name__)
+
+
+def acquire_lock():
+    """Acquire a file lock to ensure only one instance runs."""
+    if os.path.exists(LOCK_FILE):
+        try:
+            # Check if the process in the lock file is still running
+            with open(LOCK_FILE, 'r') as f:
+                pid = int(f.read().strip())
+            
+            # Check if the process exists
+            try:
+                os.kill(pid, 0)  # This doesn't kill, just checks if process exists
+                logger.error(f"Another instance is already running (PID: {pid})")
+                return False
+            except (OSError, ProcessLookupError):
+                # Process doesn't exist, remove stale lock file
+                logger.info("Removing stale lock file")
+                os.remove(LOCK_FILE)
+        except (ValueError, FileNotFoundError):
+            # Invalid or missing lock file content, remove it
+            if os.path.exists(LOCK_FILE):
+                os.remove(LOCK_FILE)
+    
+    # Create new lock file with current PID
+    try:
+        with open(LOCK_FILE, 'w') as f:
+            f.write(str(os.getpid()))
+        logger.info(f"Lock acquired (PID: {os.getpid()})")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to create lock file: {e}")
+        return False
+
+
+def release_lock():
+    """Release the file lock."""
+    try:
+        if os.path.exists(LOCK_FILE):
+            os.remove(LOCK_FILE)
+            logger.info("Lock released")
+    except Exception as e:
+        logger.error(f"Failed to remove lock file: {e}")
 
 
 class VoiceToText:
@@ -104,35 +149,34 @@ class VoiceToText:
     def record_with_vad(self) -> bytes:
         """Record audio with voice activity detection."""
         logger.info("Listening... Start speaking!")
-        
+
         audio_buffer = []
         silence_start = None
         recording_started = False
         start_time = time.time()
-        
+
         logger.info(f"Audio settings: {SAMPLE_RATE}Hz, {CHANNELS} channel(s), {DTYPE}")
-        logger.info(f"VAD settings: threshold={SILENCE_THRESHOLD}, silence_duration={SILENCE_DURATION}s")
-        
-        stream = sd.InputStream(
-            channels=CHANNELS,
-            samplerate=SAMPLE_RATE,
-            dtype=DTYPE,
-            blocksize=CHUNK_SIZE
+        logger.info(
+            f"VAD settings: threshold={SILENCE_THRESHOLD}, silence_duration={SILENCE_DURATION}s"
         )
-        
+
+        stream = sd.InputStream(
+            channels=CHANNELS, samplerate=SAMPLE_RATE, dtype=DTYPE, blocksize=CHUNK_SIZE
+        )
+
         try:
             stream.start()
-            
+
             while True:
                 # Read audio chunk
                 audio_chunk, overflowed = stream.read(CHUNK_SIZE)
                 if overflowed:
                     logger.warning("Audio buffer overflowed")
-                
+
                 # Convert to float for RMS calculation
                 audio_float = audio_chunk.astype(np.float32) / 32768.0
                 rms = self.calculate_rms(audio_float)
-                
+
                 # Voice activity detection
                 if rms > SILENCE_THRESHOLD:
                     # Voice detected
@@ -140,59 +184,65 @@ class VoiceToText:
                         logger.info("Voice detected, recording started...")
                         recording_started = True
                         start_time = time.time()
-                    
+
                     audio_buffer.append(audio_chunk)
                     silence_start = None
-                    
+
                 else:
                     # Silence detected
                     if recording_started:
                         if silence_start is None:
                             logger.debug("Silence detected, starting silence timer...")
                             silence_start = time.time()
-                        
+
                         # Add silence to buffer (up to silence duration)
                         audio_buffer.append(audio_chunk)
-                        
+
                         # Check if we've had enough silence
                         silence_duration = time.time() - silence_start
                         recording_duration = time.time() - start_time
-                        
-                        if (silence_duration >= SILENCE_DURATION and 
-                            recording_duration >= MIN_RECORDING_DURATION):
-                            logger.info(f"Silence duration ({silence_duration:.1f}s) reached threshold. Stopping recording...")
+
+                        if (
+                            silence_duration >= SILENCE_DURATION
+                            and recording_duration >= MIN_RECORDING_DURATION
+                        ):
+                            logger.info(
+                                f"Silence duration ({silence_duration:.1f}s) reached threshold. Stopping recording..."
+                            )
                             break
-                
+
                 # Safety timeout (60 seconds max)
                 if time.time() - start_time > 60:
                     logger.warning("Recording timeout (60s) reached, stopping...")
                     break
-        
+
         finally:
             stream.stop()
             stream.close()
-        
+
         if not audio_buffer:
             logger.warning("No audio recorded")
             return b""
-        
+
         # Combine all audio chunks
         combined_audio = np.concatenate(audio_buffer, axis=0)
-        
+
         # Convert to WAV format
         wav_buffer = io.BytesIO()
         sf.write(wav_buffer, combined_audio, SAMPLE_RATE, format="WAV")
-        
+
         duration = len(combined_audio) / SAMPLE_RATE
         logger.info(f"Recorded {duration:.2f} seconds of audio")
-        
+
         return wav_buffer.getvalue()
 
     def listen_and_transcribe(self):
         """Record audio with VAD, transcribe, and type the result."""
         logger.info("=== Voice-to-Text Session Started ===")
         logger.info("Voice-to-Text with VAD started!")
-        logger.info("Make sure the target text field is focused where you want the text to appear.")
+        logger.info(
+            "Make sure the target text field is focused where you want the text to appear."
+        )
         logger.info(f"Will stop recording after {SILENCE_DURATION} seconds of silence.")
         logger.info("Press Ctrl+C to abort")
         logger.info(f"Log file: {LOG_FILE}")
@@ -249,32 +299,44 @@ def main():
             print(f"tail -f {LOG_FILE}")
             return
 
-    # Parse command line arguments
-    base_url = sys.argv[1] if len(sys.argv) > 1 else SPEACHES_BASE_URL
-    model = sys.argv[2] if len(sys.argv) > 2 else MODEL
-
-    # Log initial configuration
-    logger.info(f"Starting Voice-to-Text Tool")
-    logger.info(f"Base URL: {base_url}")
-    logger.info(f"Model: {model}")
-    logger.info(f"Log file: {LOG_FILE}")
-    
-    # Check if speaches.ai is running
-    try:
-        logger.info("Checking speaches.ai connection...")
-        response = requests.get(f"{base_url}/health", timeout=5)
-        if response.status_code != 200:
-            logger.warning(f"speaches.ai might not be running at {base_url} (status: {response.status_code})")
-        else:
-            logger.info("speaches.ai connection successful")
-    except requests.RequestException as e:
-        logger.error(f"Cannot connect to speaches.ai at {base_url}: {e}")
-        logger.error("Make sure speaches.ai is running.")
+    # Acquire singleton lock
+    if not acquire_lock():
+        logger.error("Cannot start: another instance is already running")
         sys.exit(1)
 
-    # Create and run the voice-to-text system
-    vtt = VoiceToText(base_url, model)
-    vtt.listen_and_transcribe()
+    try:
+        # Parse command line arguments
+        base_url = sys.argv[1] if len(sys.argv) > 1 else SPEACHES_BASE_URL
+        model = sys.argv[2] if len(sys.argv) > 2 else MODEL
+
+        # Log initial configuration
+        logger.info(f"Starting Voice-to-Text Tool")
+        logger.info(f"Base URL: {base_url}")
+        logger.info(f"Model: {model}")
+        logger.info(f"Log file: {LOG_FILE}")
+
+        # Check if speaches.ai is running
+        try:
+            logger.info("Checking speaches.ai connection...")
+            response = requests.get(f"{base_url}/health", timeout=5)
+            if response.status_code != 200:
+                logger.warning(
+                    f"speaches.ai might not be running at {base_url} (status: {response.status_code})"
+                )
+            else:
+                logger.info("speaches.ai connection successful")
+        except requests.RequestException as e:
+            logger.error(f"Cannot connect to speaches.ai at {base_url}: {e}")
+            logger.error("Make sure speaches.ai is running.")
+            sys.exit(1)
+
+        # Create and run the voice-to-text system
+        vtt = VoiceToText(base_url, model)
+        vtt.listen_and_transcribe()
+        
+    finally:
+        # Always release the lock when exiting
+        release_lock()
 
 
 if __name__ == "__main__":
