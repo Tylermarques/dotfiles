@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
@@ -9,8 +9,6 @@
 # ]
 # ///
 
-import asyncio
-import base64
 import io
 import logging
 import os
@@ -18,7 +16,6 @@ import subprocess
 import sys
 import time
 from typing import Optional
-from datetime import datetime
 
 import numpy as np
 import sounddevice as sd
@@ -36,9 +33,13 @@ MODEL = "Systran/faster-distil-whisper-large-v3"
 # MODEL = "Systran/faster-whisper-small.en"
 
 # VAD Configuration
-SILENCE_THRESHOLD = 0.01  # RMS threshold for silence detection
+SILENCE_THRESHOLD = (
+    0.01  # RMS threshold for silence detection (will be auto-calibrated)
+)
 SILENCE_DURATION = 1.0  # Seconds of silence before stopping
 MIN_RECORDING_DURATION = 0.5  # Minimum recording duration in seconds
+NOISE_CALIBRATION_TIME = 1.0  # Seconds to calibrate background noise
+SPEECH_MULTIPLIER = 1  # Speech must be this many times louder than noise floor
 
 # Logging Configuration
 LOG_FILE = "/tmp/voice_to_text.log"
@@ -60,9 +61,9 @@ def acquire_lock():
     if os.path.exists(LOCK_FILE):
         try:
             # Check if the process in the lock file is still running
-            with open(LOCK_FILE, 'r') as f:
+            with open(LOCK_FILE, "r") as f:
                 pid = int(f.read().strip())
-            
+
             # Check if the process exists
             try:
                 os.kill(pid, 0)  # This doesn't kill, just checks if process exists
@@ -76,10 +77,10 @@ def acquire_lock():
             # Invalid or missing lock file content, remove it
             if os.path.exists(LOCK_FILE):
                 os.remove(LOCK_FILE)
-    
+
     # Create new lock file with current PID
     try:
-        with open(LOCK_FILE, 'w') as f:
+        with open(LOCK_FILE, "w") as f:
             f.write(str(os.getpid()))
         logger.info(f"Lock acquired (PID: {os.getpid()})")
         return True
@@ -146,9 +147,61 @@ class VoiceToText:
         """Calculate RMS (Root Mean Square) of audio data for voice activity detection."""
         return np.sqrt(np.mean(audio_data**2))
 
+    def calibrate_noise_floor(self) -> float:
+        """Calibrate the background noise level for adaptive VAD."""
+        logger.info(
+            f"Calibrating background noise level for {NOISE_CALIBRATION_TIME} seconds..."
+        )
+        logger.info("Please remain quiet during calibration...")
+
+        noise_samples = []
+        start_time = time.time()
+
+        stream = sd.InputStream(
+            channels=CHANNELS, samplerate=SAMPLE_RATE, dtype=DTYPE, blocksize=CHUNK_SIZE
+        )
+
+        try:
+            stream.start()
+
+            while time.time() - start_time < NOISE_CALIBRATION_TIME:
+                audio_chunk, overflowed = stream.read(CHUNK_SIZE)
+                if overflowed:
+                    logger.warning("Audio buffer overflowed during calibration")
+
+                # Convert to float for RMS calculation
+                audio_float = audio_chunk.astype(np.float32) / 32768.0
+                rms = self.calculate_rms(audio_float)
+                noise_samples.append(rms)
+
+                # time.sleep(0.01)  # Small delay to prevent excessive CPU usage
+
+        finally:
+            stream.stop()
+            stream.close()
+
+        # Calculate noise floor statistics
+        noise_floor = np.mean(noise_samples)
+        noise_std = np.std(noise_samples)
+        adaptive_threshold = noise_floor + (
+            noise_std * 2
+        )  # 2 standard deviations above mean
+
+        # Ensure minimum threshold for very quiet environments
+        final_threshold = max(adaptive_threshold, 0.005)
+
+        logger.info(f"Noise floor: {noise_floor:.4f}")
+        logger.info(f"Noise std: {noise_std:.4f}")
+        logger.info(f"Adaptive threshold: {final_threshold:.4f}")
+
+        return final_threshold
+
     def record_with_vad(self) -> bytes:
         """Record audio with voice activity detection."""
-        logger.info("Listening... Start speaking!")
+        # First calibrate the noise floor
+        adaptive_threshold = self.calibrate_noise_floor()
+
+        logger.info("Calibration complete! Now listening... Start speaking!")
 
         audio_buffer = []
         silence_start = None
@@ -157,7 +210,7 @@ class VoiceToText:
 
         logger.info(f"Audio settings: {SAMPLE_RATE}Hz, {CHANNELS} channel(s), {DTYPE}")
         logger.info(
-            f"VAD settings: threshold={SILENCE_THRESHOLD}, silence_duration={SILENCE_DURATION}s"
+            f"VAD settings: threshold={adaptive_threshold:.4f}, silence_duration={SILENCE_DURATION}s"
         )
 
         stream = sd.InputStream(
@@ -178,7 +231,7 @@ class VoiceToText:
                 rms = self.calculate_rms(audio_float)
 
                 # Voice activity detection
-                if rms > SILENCE_THRESHOLD:
+                if rms > adaptive_threshold:
                     # Voice detected
                     if not recording_started:
                         logger.info("Voice detected, recording started...")
@@ -295,7 +348,7 @@ def main():
             print("- speaches.ai is running on the specified URL")
             print("- wtype is installed (sudo apt install wtype)")
             print("- The target text field is focused")
-            print(f"\nTo watch logs in real-time:")
+            print("\nTo watch logs in real-time:")
             print(f"tail -f {LOG_FILE}")
             return
 
@@ -310,7 +363,7 @@ def main():
         model = sys.argv[2] if len(sys.argv) > 2 else MODEL
 
         # Log initial configuration
-        logger.info(f"Starting Voice-to-Text Tool")
+        logger.info("Starting Voice-to-Text Tool")
         logger.info(f"Base URL: {base_url}")
         logger.info(f"Model: {model}")
         logger.info(f"Log file: {LOG_FILE}")
@@ -333,7 +386,7 @@ def main():
         # Create and run the voice-to-text system
         vtt = VoiceToText(base_url, model)
         vtt.listen_and_transcribe()
-        
+
     finally:
         # Always release the lock when exiting
         release_lock()

@@ -291,12 +291,17 @@ function yy() {
 }
 
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/tyler/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tyler/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/tyler/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tyler/google-cloud-sdk/completion.zsh.inc'; fi
-
 # MacPorts Path varaible
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH=$PATH:/opt/cuda/bin
+
+export SYSTEMD_EDITOR=vim
+
+export PATH=$PATH:$HOME/.pulumi/bin/
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/tyler/google-cloud-sdk/path.zsh.inc' ]; then . '/home/tyler/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/tyler/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/tyler/google-cloud-sdk/completion.zsh.inc'; fi
