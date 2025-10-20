@@ -13,10 +13,12 @@ from modules import (
 from ignis.css_manager import CssManager, CssInfoPath
 from ignis.icon_manager import IconManager
 from user_options import user_options
+from ignis.options import options
 
 icon_manager = IconManager.get_default()
 css_manager = CssManager.get_default()
-WallpaperService.get_default()
+# WallpaperService.get_default()
+# options.wallpaper.set_wallpaper_path("/home/tyler/Pictures/Wallpaper/")
 
 
 def format_scss_var(name: str, val: str) -> str:

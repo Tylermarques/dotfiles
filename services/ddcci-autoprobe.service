@@ -1,0 +1,24 @@
+# /etc/systemd/system/ddcci-autoprobe.service
+[Unit]
+Description=Attach ddcci to monitor I2C buses
+After=graphical.target
+
+[Service]
+Type=oneshot
+# Use ddcutil to discover the actual buses, then attach ddcci 0x37 to each
+ExecStart=/usr/bin/bash -lc '
+  buses=$(ddcutil detect 2>/dev/null | sed -n "s/.*I2C bus: *\\/dev\\/i2c-\\([0-9]\\+\\).*/\\1/p" | sort -nu)
+  for b in $buses; do
+    echo ddcci 0x37 > /sys/bus/i2c/devices/i2c-$b/new_device || true
+  done
+'
+
+# Optional: detach on stop/reboot to keep things tidy
+ExecStop=/usr/bin/bash -lc '
+  for dev in /sys/bus/i2c/devices/*-0037; do
+    [[ -e "$dev/delete_device" ]] && echo 0x37 > "$dev/delete_device" || true
+  done
+'
+
+[Install]
+WantedBy=graphical.target
