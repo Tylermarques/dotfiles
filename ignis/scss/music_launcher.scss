@@ -1,0 +1,39 @@
+.music-launcher {
+    @include window;
+    margin-top: 20rem;
+}
+
+.music-search {
+    all: unset;
+}
+
+.music-search-box {
+    padding: 0.75rem 1rem;
+    background-color: $surfaceContainer;
+    border-radius: 1rem;
+    min-width: 30rem;
+}
+
+.music-track {
+    all: unset;
+    @include hover($surface);
+    border-radius: 1rem;
+    padding: 0.5rem 0.25rem;
+    border: 2px solid $surface;
+    margin-top: 0.25rem;
+    transition: 0.3s;
+
+    &:focus {
+        border: 2px solid $primary;
+    }
+}
+
+.music-track-label {
+    font-size: 1rem;
+}
+
+.music-no-results {
+    color: $onSurface;
+    opacity: 0.6;
+    font-size: 1rem;
+}

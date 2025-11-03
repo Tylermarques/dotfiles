@@ -5,6 +5,7 @@ from modules import (
     Bar,
     ControlCenter,
     Launcher,
+    MusicLauncher,
     NotificationPopup,
     OSD,
     Powermenu,
@@ -72,6 +73,7 @@ for monitor in range(utils.get_n_monitors()):
     NotificationPopup(monitor)
 
 Launcher()
+MusicLauncher()
 Powermenu()
 OSD()
 
