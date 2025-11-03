@@ -56,14 +56,6 @@ class MusicLauncher(widgets.Window):
             on_accept=self.__on_accept,
         )
 
-        # Scrollable container for tracks
-        self._scrolled_window = widgets.Scroll(
-            vexpand=True,
-            max_content_height=500,
-            max_content_width=700,
-            child=self._track_list,
-        )
-
         main_box = widgets.Box(
             vertical=True,
             valign="start",
@@ -81,7 +73,7 @@ class MusicLauncher(widgets.Window):
                         self._entry,
                     ],
                 ),
-                self._scrolled_window,
+                self._track_list,
             ],
         )
 
