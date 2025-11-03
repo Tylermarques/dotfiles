@@ -7,7 +7,7 @@ Wants=network-online.target tailscaled.service
 What=proxmox:/main/plex
 Where=/mnt/nfs
 Type=nfs
-Options=_netdev,vers=4.2,noauto,x-systemd.automount,timeo=14
+Options=_netdev,vers=4.2,noauto,x-systemd.automount,actimeo=600,lookupcache=positive,nconnect=4,fsc
 
 [Install]
 WantedBy=multi-user.target
