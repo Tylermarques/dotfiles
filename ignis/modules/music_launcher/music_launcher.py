@@ -1,4 +1,6 @@
 import asyncio
+import os
+import re
 import shlex
 from ignis import widgets
 from ignis.window_manager import WindowManager
@@ -7,9 +9,41 @@ from ignis import utils
 window_manager = WindowManager.get_default()
 
 
+def _format_track_display(track_path: str) -> str:
+    """
+    Format a track path into a friendly display name: "Artist - Song"
+
+    Example:
+        "Led Zeppelin/IV/01-Stairway to Heaven.mp3" -> "Led Zeppelin - Stairway to Heaven"
+    """
+    # Split the path into components
+    parts = track_path.split("/")
+
+    if len(parts) >= 2:
+        # Extract artist (first directory) and filename (last component)
+        artist = parts[0]
+        filename = parts[-1]
+    else:
+        # If no directory structure, just use the filename
+        artist = None
+        filename = parts[0]
+
+    # Remove file extension
+    song_name = os.path.splitext(filename)[0]
+
+    # Strip leading track numbers (e.g., "01-", "01. ", "1-", "1. ")
+    song_name = re.sub(r"^\d+[\s\-\.]+", "", song_name)
+
+    # Format and return
+    if artist:
+        return f"{artist} - {song_name}"
+    else:
+        return song_name
+
+
 class MusicTrackItem(widgets.Button):
-    def __init__(self, track: str) -> None:
-        self._track = track
+    def __init__(self, track_path: str, display_text: str) -> None:
+        self._track_path = track_path  # Original path for mpc commands
         super().__init__(
             on_click=lambda x: self.play(),
             css_classes=["music-track"],
@@ -21,7 +55,7 @@ class MusicTrackItem(widgets.Button):
                         style="margin-right: 0.75rem;",
                     ),
                     widgets.Label(
-                        label=track,
+                        label=display_text,  # Formatted display text
                         ellipsize="end",
                         max_width_chars=60,
                         css_classes=["music-track-label"],
@@ -34,11 +68,11 @@ class MusicTrackItem(widgets.Button):
         # Close the music launcher window immediately
         window_manager.close_window("ignis_MUSIC_LAUNCHER")
 
-        # Escape track name for safe shell execution
-        escaped_track = shlex.quote(self._track)
+        # Escape track path for safe shell execution
+        escaped_track = shlex.quote(self._track_path)
 
         # Execute mpc commands asynchronously to avoid UI freeze
-        command = f"mpc insert {escaped_track} && mpc next >/dev/null && notify-send 'Playing {escaped_track}'"
+        command = f'mpc insert {escaped_track} && mpc next >/dev/null && notify-send "Playing {escaped_track}"'
         asyncio.create_task(utils.exec_sh_async(command))
 
 
@@ -132,9 +166,11 @@ class MusicLauncher(widgets.Window):
             self._track_list.visible = False
             return
 
-        # Filter tracks based on query (case-insensitive substring match)
+        # Filter tracks based on query (search in both path and formatted display)
         filtered_tracks = [
-            track for track in self._all_tracks if query in track.lower()
+            track
+            for track in self._all_tracks
+            if query in track.lower() or query in _format_track_display(track).lower()
         ]
 
         if not filtered_tracks:
@@ -149,7 +185,8 @@ class MusicLauncher(widgets.Window):
             self._track_list.visible = True
         else:
             self._track_list.visible = True
-            # Show up to 20 results
+            # Show up to 20 results with formatted display
             self._track_list.child = [
-                MusicTrackItem(track) for track in filtered_tracks[:20]
+                MusicTrackItem(track, _format_track_display(track))
+                for track in filtered_tracks[:20]
             ]
