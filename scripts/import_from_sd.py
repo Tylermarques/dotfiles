@@ -16,6 +16,10 @@ from collections import Counter
 
 # Supported media file extensions
 MEDIA_EXTS = {
+    # DJI Raw and info files
+    ".DNG",
+    ".LRF",
+    ".SRT",
     ".jpg",
     ".jpeg",
     ".png",
@@ -254,6 +258,170 @@ def get_timestamp(file_path):
     return datetime.fromtimestamp(file_path.stat().st_mtime)
 
 
+def extract_gps_from_exif(file_path):
+    """Extract GPS coordinates from image EXIF data using exiftool."""
+    try:
+        result = subprocess.run(
+            ["exiftool", "-ee", "-json", str(file_path)],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        data = json.loads(result.stdout)
+        if not data:
+            return None
+
+        exif_data = data[0]
+
+        # Check for GPS coordinates in DMS format
+        lat_dms = exif_data.get("GPSLatitude")
+        lon_dms = exif_data.get("GPSLongitude")
+
+        if lat_dms and lon_dms:
+            # Parse DMS format like "47 deg 9' 38.60\" N"
+            lat_decimal = parse_dms_to_decimal(lat_dms)
+            lon_decimal = parse_dms_to_decimal(lon_dms)
+
+            if lat_decimal is not None and lon_decimal is not None:
+                return {
+                    "latitude": lat_decimal,
+                    "longitude": lon_decimal,
+                    "file": file_path,
+                }
+
+    except (subprocess.CalledProcessError, json.JSONDecodeError, KeyError):
+        pass
+
+    return None
+
+
+def parse_dms_to_decimal(dms_string):
+    """Convert DMS format like '47 deg 9' 38.60\" N' to decimal degrees."""
+    try:
+        # Remove quotes and split by spaces
+        parts = dms_string.replace('"', '').replace("'", '').split()
+
+        # Extract degrees, minutes, seconds, and direction
+        degrees = float(parts[0])
+        minutes = float(parts[2])
+        seconds = float(parts[3])
+        direction = parts[4] if len(parts) > 4 else parts[-1]
+
+        # Convert to decimal
+        decimal = degrees + minutes/60 + seconds/3600
+
+        # Apply direction (negative for South/West)
+        if direction in ['S', 'W']:
+            decimal = -decimal
+
+        return decimal
+
+    except (ValueError, IndexError):
+        return None
+
+
+def reverse_geocode(latitude, longitude):
+    """Convert GPS coordinates to location name using Nominatim API."""
+    try:
+        import urllib.request
+        import urllib.parse
+
+        # Use Nominatim (OpenStreetMap) API for reverse geocoding
+        url = "https://nominatim.openstreetmap.org/reverse"
+        params = {
+            "format": "json",
+            "lat": latitude,
+            "lon": longitude,
+            "addressdetails": 1,
+            "accept-language": "en",
+        }
+
+        query_string = urllib.parse.urlencode(params)
+        full_url = f"{url}?{query_string}"
+
+        req = urllib.request.Request(full_url)
+        req.add_header("User-Agent", "SD Card Import Script")
+
+        with urllib.request.urlopen(req, timeout=10) as response:
+            data = json.loads(response.read().decode())
+
+            address = data.get("address", {})
+
+            # Try to get a good location name in order of preference
+            location_parts = []
+
+            # City/town level
+            city = (
+                address.get("city")
+                or address.get("town")
+                or address.get("village")
+                or address.get("municipality")
+            )
+
+            # State/region level
+            state = (
+                address.get("state") or address.get("province") or address.get("region")
+            )
+
+            # Country level
+            country = address.get("country")
+
+            # Build location name
+            if city:
+                location_parts.append(city)
+            if state and state != city:
+                location_parts.append(state)
+            if country and len(location_parts) == 0:
+                location_parts.append(country)
+
+            if location_parts:
+                return "_".join(location_parts).replace(" ", "_")
+
+    except Exception:
+        pass
+
+    return None
+
+
+def analyze_trip_locations(trip_files):
+    """Analyze GPS data from trip files and suggest a location-based name."""
+    locations = []
+
+    # Extract GPS data from image and video files
+    for file_path, _ in trip_files:
+        if file_path.suffix.lower() in {
+            ".jpg",
+            ".jpeg",
+            ".heic",
+            ".cr2",
+            ".nef",
+            ".orf",
+            ".rw2",
+            ".mp4",
+            ".mov",
+            ".avi",
+        }:
+            gps_data = extract_gps_from_exif(file_path)
+            if gps_data:
+                location = reverse_geocode(gps_data["latitude"], gps_data["longitude"])
+                if location:
+                    locations.append(location)
+
+    if not locations:
+        return None
+
+    # Find the most common location
+    location_counts = Counter(locations)
+    most_common_location = location_counts.most_common(1)[0][0]
+
+    # If multiple locations, use the most common one
+    if len(location_counts) > 1:
+        return f"{most_common_location}_trip"
+    else:
+        return most_common_location
+
+
 def group_media_files(mount_point, threshold_days):
     # Recursively gather media files
     files = [
@@ -271,8 +439,10 @@ def group_media_files(mount_point, threshold_days):
     last_ts = None
     for ts, fp in files_ts:
         if last_ts is None or (ts - last_ts) <= threshold:
+            # If we're below threshold, add to current trip
             current_trip.append((fp, ts))
         else:
+            # Above threshold, create new trip
             trips.append(current_trip)
             current_trip = [(fp, ts)]
         last_ts = ts
@@ -286,9 +456,22 @@ def organize_trips(trips, mount_point):
     for idx, trip in enumerate(trips, start=1):
         start_ts = trip[0][1]
         end_ts = trip[-1][1]
-        dir_name = (
-            f"trip_{idx}_{start_ts.strftime('%Y%m%d')}_{end_ts.strftime('%Y%m%d')}"
-        )
+
+        # Try to get location-based name
+        print(f"Analyzing location data for trip {idx}...")
+        location_name = analyze_trip_locations(trip)
+
+        if location_name:
+            # Use location-based name with date range
+            dir_name = f"{location_name}_{start_ts.strftime('%Y%m%d')}_{end_ts.strftime('%Y%m%d')}"
+            print(f"Trip {idx} location detected: {location_name}")
+        else:
+            # Fall back to date-based naming
+            dir_name = (
+                f"trip_{idx}_{start_ts.strftime('%Y%m%d')}_{end_ts.strftime('%Y%m%d')}"
+            )
+            print(f"Trip {idx} location detection failed, using date-based name")
+
         dest = mount_point / dir_name
         dest.mkdir(exist_ok=True)
         for fp, ts in trip:
