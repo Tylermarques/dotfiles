@@ -1,18 +1,5 @@
 return {
   {
-    "supermaven-inc/supermaven-nvim",
-    config = function()
-      require("supermaven-nvim").setup({
-        keymaps = {
-          accept_suggestion = "<C-Tab>",
-          clear_suggestion = "<C-]>",
-          accept_word = "<C-j>",
-        },
-        ignore_filetypes = { "TelescopePrompt", "NvimTree", "Outline", "Secret", "Log" },
-      })
-    end,
-  },
-  {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
@@ -29,7 +16,6 @@ return {
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
       "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      "zbirenbaum/copilot.lua", -- for providers='copilot'
       {
         -- support for image pasting
         "HakonHarnes/img-clip.nvim",
