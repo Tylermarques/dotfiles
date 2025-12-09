@@ -94,6 +94,15 @@ class VolumeIcon(IndicatorIcon):
         )
 
 
+class MicrophoneIcon(IndicatorIcon):
+    def __init__(self):
+        super().__init__(
+            image=audio.microphone.bind("icon_name"),
+            css_classes=["microphone-indicator"],
+            visible=audio.microphone.bind("is_muted"),
+        )
+
+
 class VoiceToTextIcon(IndicatorIcon):
     def __init__(self):
         super().__init__(
@@ -121,6 +130,7 @@ class StatusPill(widgets.Button):
                     EthernetIcon(),
                     VpnIcon(),
                     VolumeIcon(),
+                    MicrophoneIcon(),
                     DNDIcon(),
                     widgets.Label(
                         label=current_time.bind("value"),

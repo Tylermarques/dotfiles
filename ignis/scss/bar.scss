@@ -111,6 +111,10 @@
     animation: recorder-animation 2s infinite;
 }
 
+.microphone-indicator {
+    color: $error;
+}
+
 .voice-to-text-button {
     @include hover($surface);
     border-radius: 0.5rem;
