@@ -6,6 +6,35 @@
     background-color: rgba($surface, 0.3);
 }
 
+.music-widget {
+    background-color: $surface;
+    border-radius: 1rem;
+    padding: 0 0.75rem;
+    margin: 0 0.5rem;
+    transition: 0.3s;
+    color: $onSurface;
+}
+
+.music-button {
+    padding: 0 0.5rem;
+    border-radius: 0.5rem;
+    transition: 0.2s;
+    
+    &:hover {
+        background-color: rgba($onSurface, 0.1);
+    }
+}
+
+.play-pause {
+    padding: 0 0.75rem;
+}
+
+.music-label {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-weight: bold;
+}
+
 .clock {
     @include hover($surface);
     color: $onSurface;

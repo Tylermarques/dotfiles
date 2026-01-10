@@ -1,6 +1,20 @@
 import os
 from ignis import utils
+from ignis.services.mpris import MprisPlayer
 from ignis.services.wallpaper import WallpaperService
+
+# Patch MprisPlayer to avoid crash on artwork loading
+original_load_art_url = MprisPlayer._MprisPlayer__load_art_url
+
+async def safe_load_art_url(self, art_url: str):
+    try:
+        return await original_load_art_url(self, art_url)
+    except Exception as e:
+        print(f"WARNING: Failed to load art url {art_url}: {e}")
+        return None
+
+MprisPlayer._MprisPlayer__load_art_url = safe_load_art_url
+
 from modules import (
     Bar,
     ControlCenter,
