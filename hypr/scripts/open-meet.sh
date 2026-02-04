@@ -12,9 +12,17 @@ hyprctl --instance 0 dispatch workspace "$WORKSPACE"
 firefox_addr=$(hyprctl --instance 0 clients -j | jq -r ".[] | select(.workspace.id == $WORKSPACE and .class == \"firefox\") | .address" | head -1)
 
 if [ -n "$firefox_addr" ]; then
-    hyprctl --instance 0 dispatch focuswindow "address:$firefox_addr"
-    sleep 0.3
-    firefox "$EXT_URL"
+  hyprctl --instance 0 dispatch focuswindow "address:$firefox_addr"
+  sleep 0.3
+  firefox "$EXT_URL"
 else
-    firefox --new-window "$EXT_URL"
+  hyprctl --instance 0 dispatch layoutmsg preselect u
+  firefox --new-window "$EXT_URL"
+  sleep 0.8
+
+  obs_addr=$(hyprctl --instance 0 clients -j | jq -r ".[] | select(.workspace.id == $WORKSPACE and .class == \"com.obsproject.Studio\") | .address" | head -1)
+  if [ -n "$obs_addr" ]; then
+    hyprctl --instance 0 dispatch focuswindow "address:$obs_addr"
+    hyprctl --instance 0 dispatch splitratio 0.33
+  fi
 fi
