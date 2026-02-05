@@ -2,7 +2,7 @@
 # Starts protonmail-bridge then thunderbird after IMAP port is ready
 
 IMAP_PORT=1143
-TIMEOUT=3
+TIMEOUT=600
 
 wait_for_keyring() {
   local waited=0
@@ -33,6 +33,7 @@ if ! wait_for_keyring; then
 fi
 
 protonmail-bridge &
+sleep 2
 
 if ! wait_for_port; then
   notify-send -u critical "Mail Startup Failed" "Timed out waiting for Protonmail Bridge"
