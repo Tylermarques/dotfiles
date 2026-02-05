@@ -58,6 +58,7 @@ return {
       local cwd = vim.uv.cwd()
       local basename = vim.fs.basename(cwd)
       _99.setup({
+        model = "anthropic/claude-sonnet-4-5",
         logger = {
           level = _99.DEBUG,
           path = "/tmp/" .. basename .. ".99.debug",
@@ -89,8 +90,7 @@ return {
             "scratch/custom_rules/",
           },
 
-          --- What autocomplete do you use.  We currently only
-          --- support cmp right now
+          --- What autocomplete do you use (99 only supports "cmp")
           source = "cmp",
         },
 
@@ -108,33 +108,16 @@ return {
         },
       })
 
-      -- Create your own short cuts for the different types of actions
-      vim.keymap.set("n", "<leader>9f", function()
-        _99.fill_in_function()
-      end)
-      -- take extra note that i have visual selection only in v mode
-      -- technically whatever your last visual selection is, will be used
-      -- so i have this set to visual mode so i dont screw up and use an
-      -- old visual selection
-      --
-      -- likely ill add a mode check and assert on required visual mode
-      -- so just prepare for it now
-      vim.keymap.set("v", "<leader>9v", function()
-        _99.visual()
-      end)
-
-      --- if you have a request you dont want to make any changes, just cancel it
-      vim.keymap.set("v", "<leader>9s", function()
-        _99.stop_all_requests()
-      end)
-
-      --- Example: Using rules + actions for custom behaviors
-      --- Create a rule file like ~/.rules/debug.md that defines custom behavior.
-      --- For instance, a "debug" rule could automatically add printf statements
-      --- throughout a function to help debug its execution flow.
-      vim.keymap.set("n", "<leader>9fd", function()
-        _99.fill_in_function()
-      end)
+      vim.keymap.set("n", "<leader>9f", _99.fill_in_function, { desc = "99: Fill function" })
+      vim.keymap.set("n", "<leader>9F", _99.fill_in_function_prompt, { desc = "99: Fill function (prompt)" })
+      vim.keymap.set("v", "<leader>9v", _99.visual, { desc = "99: Visual" })
+      vim.keymap.set("v", "<leader>9V", _99.visual_prompt, { desc = "99: Visual (prompt)" })
+      vim.keymap.set({ "n", "v" }, "<leader>9s", _99.stop_all_requests, { desc = "99: Stop all" })
+      vim.keymap.set("n", "<leader>9l", _99.view_logs, { desc = "99: View logs" })
+      vim.keymap.set("n", "<leader>9[", _99.prev_request_logs, { desc = "99: Prev log" })
+      vim.keymap.set("n", "<leader>9]", _99.next_request_logs, { desc = "99: Next log" })
+      vim.keymap.set("n", "<leader>9i", _99.info, { desc = "99: Info" })
+      vim.keymap.set("n", "<leader>9q", _99.previous_requests_to_qfix, { desc = "99: Requests to qflist" })
     end,
   },
 }
