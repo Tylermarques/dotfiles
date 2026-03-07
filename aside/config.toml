@@ -1,0 +1,44 @@
+[model]
+name = "anthropic/claude-opus-4-6"
+
+[input]
+font = "Iosevka 12"
+
+[storage]
+archive_dir = "/mnt/nfs/LLM/Chats"
+
+[tools]
+dirs = ["~/.config/aside/tools"]
+
+[overlay]
+position = "top-center"
+font = "Iosevka 12"
+max_lines = 5
+corner_radius = 8
+border_width = 1
+accent_height = 4
+scroll_duration = 200
+fade_duration = 400
+width = 450
+margin_top = 5
+padding_top = 2.5
+
+[overlay.colors]
+background = "#1a1c1ee6"
+foreground = "#d4d4d4ff"
+border = "#5a4a3aff"
+accent = "#5b9a6a"
+user_accent = "#a07048"
+
+[voice]
+enabled = true
+stt_model = "base"
+stt_device = "cpu"
+smart_silence = true
+silence_timeout = 2.5
+no_speech_timeout = 3.0
+
+[tts]
+enabled = true
+speed = 1.0
+filter = { skip_code_blocks = true, skip_urls = true }
