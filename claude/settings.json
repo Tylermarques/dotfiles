@@ -1,0 +1,77 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(file:*)",
+      "Bash(stat:*)",
+      "Bash(tree:*)",
+      "Bash(du:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(ag:*)",
+      "Bash(fd:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(which:*)",
+      "Bash(whoami:*)",
+      "Bash(env:*)",
+      "Bash(ps:*)",
+      "Bash(pwd:*)",
+      "Bash(kubectl get:*)",
+      "Bash(kubectl describe:*)",
+      "Bash(kubectl logs:*)",
+      "Bash(kubectl top:*)",
+      "Bash(kubectl explain:*)",
+      "Bash(kubectl api-resources:*)",
+      "Bash(kubectl api-versions:*)",
+      "Bash(kubectl cluster-info:*)",
+      "Bash(kubectl config view:*)",
+      "Bash(kubectl config get-contexts:*)",
+      "Bash(kubectl config current-context:*)",
+      "Bash(kubectl version:*)",
+      "Bash(kubectl auth can-i:*)"
+    ]
+  },
+  "model": "opus",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/tyler/.claude/hooks/gsd-check-update.js\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/tyler/.claude/hooks/gsd-context-monitor.js\""
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node \"/home/tyler/.claude/hooks/gsd-statusline.js\""
+  },
+  "enabledPlugins": {
+    "playwright-skill@playwright-skill": true,
+    "ralph-loop@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true,
+  "fastMode": true,
+  "skipDangerousModePermissionPrompt": true
+}
