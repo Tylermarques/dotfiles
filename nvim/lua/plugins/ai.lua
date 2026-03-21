@@ -108,16 +108,13 @@ return {
         },
       })
 
-      vim.keymap.set("n", "<leader>9f", _99.fill_in_function, { desc = "99: Fill function" })
-      vim.keymap.set("n", "<leader>9F", _99.fill_in_function_prompt, { desc = "99: Fill function (prompt)" })
-      vim.keymap.set("v", "<leader>9v", _99.visual, { desc = "99: Visual" })
-      vim.keymap.set("v", "<leader>9V", _99.visual_prompt, { desc = "99: Visual (prompt)" })
-      vim.keymap.set({ "n", "v" }, "<leader>9s", _99.stop_all_requests, { desc = "99: Stop all" })
+      vim.keymap.set("n", "<leader>9v", _99.vibe, { desc = "99: Vibe (prompt)" })
+      vim.keymap.set("v", "<leader>9v", _99.visual, { desc = "99: Visual (prompt)" })
+      vim.keymap.set("n", "<leader>9s", _99.search, { desc = "99: Search (prompt)" })
+      vim.keymap.set("n", "<leader>9o", _99.open, { desc = "99: Open recent" })
+      vim.keymap.set({ "n", "v" }, "<leader>9x", _99.stop_all_requests, { desc = "99: Stop all" })
       vim.keymap.set("n", "<leader>9l", _99.view_logs, { desc = "99: View logs" })
-      vim.keymap.set("n", "<leader>9[", _99.prev_request_logs, { desc = "99: Prev log" })
-      vim.keymap.set("n", "<leader>9]", _99.next_request_logs, { desc = "99: Next log" })
       vim.keymap.set("n", "<leader>9i", _99.info, { desc = "99: Info" })
-      vim.keymap.set("n", "<leader>9q", _99.previous_requests_to_qfix, { desc = "99: Requests to qflist" })
     end,
   },
 }

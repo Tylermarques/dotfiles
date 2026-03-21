@@ -40,7 +40,7 @@
       "Bash(kubectl auth can-i:*)"
     ]
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "SessionStart": [
       {
