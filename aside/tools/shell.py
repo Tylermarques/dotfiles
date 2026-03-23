@@ -1,6 +1,7 @@
 """Restricted shell — run read-only system commands from an allowlist."""
 
 import re
+import shlex
 import subprocess
 
 ALLOWLIST = {
@@ -53,7 +54,7 @@ def run(command: str) -> str:
 
     try:
         result = subprocess.run(
-            command.split(),
+            shlex.split(command),
             capture_output=True,
             text=True,
             timeout=15,
