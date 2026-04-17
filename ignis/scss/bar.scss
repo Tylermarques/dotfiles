@@ -140,6 +140,20 @@
     animation: recorder-animation 2s infinite;
 }
 
+@keyframes meeting-recorder-pulse {
+    0%, 100% {
+        opacity: 0.15;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.meeting-recorder-indicator {
+    color: $error;
+    animation: meeting-recorder-pulse 3s ease-in-out infinite;
+}
+
 .microphone-indicator {
     color: $error;
 }

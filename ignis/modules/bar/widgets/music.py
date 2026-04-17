@@ -3,6 +3,9 @@ from ignis import widgets
 from ignis.services.mpris import MprisService, MprisPlayer
 from ignis import utils
 
+from services.meeting_notes import meeting_notes_service
+from .meeting_recorder import MeetingRecorderIndicator
+
 mpris = MprisService.get_default()
 
 class Music(widgets.Box):
@@ -13,31 +16,44 @@ class Music(widgets.Box):
         )
         self._player = None
         self._observed_players = set()
-        
+        self._has_player = False
+
         self._label = widgets.Label(
-            label="No Media",
+            label="",
             css_classes=["music-label"],
             ellipsize="end",
             max_width_chars=40,
+            visible=False,
         )
-        
+
+        self._recorder_indicator = MeetingRecorderIndicator()
+
         self._box = widgets.Box(
             child=[
+                self._recorder_indicator,
                 self._label,
             ],
-            spacing=10,
+            spacing=6,
         )
         self.append(self._box)
-        
+
         # Connect to mpris service
         mpris.connect("player_added", self.__on_player_added)
-        
+
+        # Recording state controls visibility alongside music
+        meeting_notes_service.is_recording.connect(
+            "notify::value", self.__update_visibility
+        )
+
         # Observe all current players
         for p in mpris.players:
             self.__observe_player(p)
-            
+
         # Initial scan
         self.__rescan_players()
+
+    def __update_visibility(self, *_args):
+        self.visible = self._has_player or meeting_notes_service.is_recording.value
 
     def __observe_player(self, player):
         if player in self._observed_players:
@@ -74,7 +90,9 @@ class Music(widgets.Box):
                 self.__set_player(candidate)
         else:
             self._player = None
-            self.visible = False
+            self._has_player = False
+            self._label.visible = False
+            self.__update_visibility()
 
     def __on_player_added(self, service, player):
         self.__observe_player(player)
@@ -102,8 +120,10 @@ class Music(widgets.Box):
 
     def __set_player(self, player):
         self._player = player
-        self.visible = True
-        
+        self._has_player = True
+        self._label.visible = True
+        self.__update_visibility()
+
         # Connect signals for title/artist updates
         # We can re-connect safely because these are specific to the "active" player visualization
         player.connect("notify::title", lambda x, y: self.__update_label(x))
