@@ -40,4 +40,4 @@ if ! wait_for_port; then
   exit 1
 fi
 
-thunderbird &
+betterbird &
