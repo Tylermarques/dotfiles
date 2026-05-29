@@ -5,36 +5,26 @@ import shlex
 from ignis import widgets
 from ignis.window_manager import WindowManager
 from ignis import utils
+from gi.repository import Gtk, Gdk
 
 window_manager = WindowManager.get_default()
 
+SEARCH_MODES = ["All Songs", "Artists", "Albums", "Playlists"]
+
 
 def _format_track_display(track_path: str) -> str:
-    """
-    Format a track path into a friendly display name: "Artist - Song"
-
-    Example:
-        "Led Zeppelin/IV/01-Stairway to Heaven.mp3" -> "Led Zeppelin - Stairway to Heaven"
-    """
-    # Split the path into components
     parts = track_path.split("/")
 
     if len(parts) >= 2:
-        # Extract artist (first directory) and filename (last component)
         artist = parts[0]
         filename = parts[-1]
     else:
-        # If no directory structure, just use the filename
         artist = None
         filename = parts[0]
 
-    # Remove file extension
     song_name = os.path.splitext(filename)[0]
-
-    # Strip leading track numbers (e.g., "01-", "01. ", "1-", "1. ")
     song_name = re.sub(r"^\d+[\s\-\.]+", "", song_name)
 
-    # Format and return
     if artist:
         return f"{artist} - {song_name}"
     else:
@@ -43,7 +33,7 @@ def _format_track_display(track_path: str) -> str:
 
 class MusicTrackItem(widgets.Button):
     def __init__(self, track_path: str, display_text: str) -> None:
-        self._track_path = track_path  # Original path for mpc commands
+        self._track_path = track_path
         super().__init__(
             on_click=lambda x: self.play(),
             css_classes=["music-track"],
@@ -55,7 +45,7 @@ class MusicTrackItem(widgets.Button):
                         style="margin-right: 0.75rem;",
                     ),
                     widgets.Label(
-                        label=display_text,  # Formatted display text
+                        label=display_text,
                         ellipsize="end",
                         max_width_chars=60,
                         css_classes=["music-track-label"],
@@ -65,20 +55,107 @@ class MusicTrackItem(widgets.Button):
         )
 
     def play(self) -> None:
-        # Close the music launcher window immediately
         window_manager.close_window("ignis_MUSIC_LAUNCHER")
-
-        # Escape track path for safe shell execution
         escaped_track = shlex.quote(self._track_path)
-
-        # Execute mpc commands asynchronously to avoid UI freeze
         command = f'mpc insert {escaped_track} && mpc next >/dev/null && notify-send "Playing {escaped_track}"'
+        asyncio.create_task(utils.exec_sh_async(command))
+
+
+class MusicArtistItem(widgets.Button):
+    def __init__(self, artist_name: str) -> None:
+        self._artist_name = artist_name
+        super().__init__(
+            on_click=lambda x: self.play(),
+            css_classes=["music-track"],
+            child=widgets.Box(
+                child=[
+                    widgets.Icon(
+                        icon_name="avatar-default-symbolic",
+                        pixel_size=32,
+                        style="margin-right: 0.75rem;",
+                    ),
+                    widgets.Label(
+                        label=artist_name,
+                        ellipsize="end",
+                        max_width_chars=60,
+                        css_classes=["music-track-label"],
+                    ),
+                ]
+            ),
+        )
+
+    def play(self) -> None:
+        window_manager.close_window("ignis_MUSIC_LAUNCHER")
+        escaped = shlex.quote(self._artist_name)
+        command = f'mpc findadd artist {escaped} && mpc next >/dev/null && notify-send "Playing artist {escaped}"'
+        asyncio.create_task(utils.exec_sh_async(command))
+
+
+class MusicAlbumItem(widgets.Button):
+    def __init__(self, album_name: str) -> None:
+        self._album_name = album_name
+        super().__init__(
+            on_click=lambda x: self.play(),
+            css_classes=["music-track"],
+            child=widgets.Box(
+                child=[
+                    widgets.Icon(
+                        icon_name="media-optical-symbolic",
+                        pixel_size=32,
+                        style="margin-right: 0.75rem;",
+                    ),
+                    widgets.Label(
+                        label=album_name,
+                        ellipsize="end",
+                        max_width_chars=60,
+                        css_classes=["music-track-label"],
+                    ),
+                ]
+            ),
+        )
+
+    def play(self) -> None:
+        window_manager.close_window("ignis_MUSIC_LAUNCHER")
+        escaped = shlex.quote(self._album_name)
+        command = f'mpc clear && mpc findadd album {escaped} && mpc play && notify-send "Playing album {escaped}"'
+        asyncio.create_task(utils.exec_sh_async(command))
+
+
+class MusicPlaylistItem(widgets.Button):
+    def __init__(self, playlist_name: str) -> None:
+        self._playlist_name = playlist_name
+        super().__init__(
+            on_click=lambda x: self.play(),
+            css_classes=["music-track"],
+            child=widgets.Box(
+                child=[
+                    widgets.Icon(
+                        icon_name="view-list-symbolic",
+                        pixel_size=32,
+                        style="margin-right: 0.75rem;",
+                    ),
+                    widgets.Label(
+                        label=playlist_name,
+                        ellipsize="end",
+                        max_width_chars=60,
+                        css_classes=["music-track-label"],
+                    ),
+                ]
+            ),
+        )
+
+    def play(self) -> None:
+        window_manager.close_window("ignis_MUSIC_LAUNCHER")
+        escaped = shlex.quote(self._playlist_name)
+        command = f'mpc clear && mpc load {escaped} && mpc play && notify-send "Playing playlist {escaped}"'
         asyncio.create_task(utils.exec_sh_async(command))
 
 
 class MusicLauncher(widgets.Window):
     def __init__(self):
-        self._all_tracks = []
+        self._mode_index = 0
+        self._data = {mode: [] for mode in SEARCH_MODES}
+
         self._track_list = widgets.Box(
             vertical=True, visible=False, style="margin-top: 1rem;"
         )
@@ -88,6 +165,36 @@ class MusicLauncher(widgets.Window):
             css_classes=["music-search"],
             on_change=self.__search,
             on_accept=self.__on_accept,
+        )
+
+        key_ctrl = Gtk.EventControllerKey.new()
+        key_ctrl.connect("key-pressed", self.__on_key_pressed)
+        self._entry.add_controller(key_ctrl)
+
+        self._mode_labels = []
+        for i, mode in enumerate(SEARCH_MODES):
+            label = widgets.Label(
+                label=mode,
+                css_classes=["music-mode-active" if i == 0 else "music-mode"],
+            )
+            self._mode_labels.append(label)
+
+        separator_children = []
+        for i, label in enumerate(self._mode_labels):
+            separator_children.append(label)
+            if i < len(self._mode_labels) - 1:
+                separator_children.append(
+                    widgets.Label(
+                        label="·",
+                        css_classes=["music-mode-separator"],
+                        style="margin: 0 0.4rem;",
+                    )
+                )
+
+        self._mode_bar = widgets.Box(
+            css_classes=["music-mode-bar"],
+            halign="center",
+            child=separator_children,
         )
 
         main_box = widgets.Box(
@@ -107,6 +214,7 @@ class MusicLauncher(widgets.Window):
                         self._entry,
                     ],
                 ),
+                self._mode_bar,
                 self._track_list,
             ],
         )
@@ -134,15 +242,31 @@ class MusicLauncher(widgets.Window):
             ),
         )
 
-        # Load music library on initialization
-        self.__load_tracks()
+        self.__load_all_data()
 
-    def __load_tracks(self) -> None:
-        """Load all tracks from mpc listall"""
+    def __load_all_data(self) -> None:
         result = utils.exec_sh("mpc listall")
         if result.stdout:
-            self._all_tracks = [
-                track.strip() for track in result.stdout.split("\n") if track.strip()
+            self._data["All Songs"] = [
+                t.strip() for t in result.stdout.split("\n") if t.strip()
+            ]
+
+        result = utils.exec_sh("mpc list artist")
+        if result.stdout:
+            self._data["Artists"] = [
+                a.strip() for a in result.stdout.split("\n") if a.strip()
+            ]
+
+        result = utils.exec_sh("mpc list album")
+        if result.stdout:
+            self._data["Albums"] = [
+                a.strip() for a in result.stdout.split("\n") if a.strip()
+            ]
+
+        result = utils.exec_sh("mpc lsplaylists")
+        if result.stdout:
+            self._data["Playlists"] = [
+                p.strip() for p in result.stdout.split("\n") if p.strip()
             ]
 
     def __on_open(self, *args) -> None:
@@ -150,9 +274,29 @@ class MusicLauncher(widgets.Window):
             return
 
         self._entry.text = ""
+        self._mode_index = 0
+        self.__update_mode_labels()
         self._entry.grab_focus()
-        # Reload tracks when window opens (in case library changed)
-        self.__load_tracks()
+        self.__load_all_data()
+
+    def __on_key_pressed(self, controller, keyval, keycode, state) -> bool:
+        if keyval == Gdk.KEY_Tab:
+            self._mode_index = (self._mode_index + 1) % len(SEARCH_MODES)
+            self.__update_mode_labels()
+            self.__search()
+            return True
+        if keyval == Gdk.KEY_ISO_Left_Tab:
+            self._mode_index = (self._mode_index - 1) % len(SEARCH_MODES)
+            self.__update_mode_labels()
+            self.__search()
+            return True
+        return False
+
+    def __update_mode_labels(self) -> None:
+        for i, label in enumerate(self._mode_labels):
+            label.css_classes = [
+                "music-mode-active" if i == self._mode_index else "music-mode"
+            ]
 
     def __on_accept(self, *args) -> None:
         if len(self._track_list.child) > 0:
@@ -160,33 +304,57 @@ class MusicLauncher(widgets.Window):
 
     def __search(self, *args) -> None:
         query = self._entry.text.lower()
+        mode = SEARCH_MODES[self._mode_index]
 
         if query == "":
             self._entry.grab_focus()
             self._track_list.visible = False
             return
 
-        # Filter tracks based on query (search in both path and formatted display)
-        filtered_tracks = [
-            track
-            for track in self._all_tracks
-            if query in track.lower() or query in _format_track_display(track).lower()
-        ]
+        items = self._data.get(mode, [])
 
-        if not filtered_tracks:
-            self._track_list.visible = False
-            self._track_list.child = [
-                widgets.Label(
-                    label="No tracks found",
-                    css_classes=["music-no-results"],
-                    style="padding: 1rem;",
-                )
+        if mode == "All Songs":
+            filtered = [
+                t for t in items
+                if query in t.lower() or query in _format_track_display(t).lower()
             ]
-            self._track_list.visible = True
-        else:
-            self._track_list.visible = True
-            # Show up to 20 results with formatted display
-            self._track_list.child = [
-                MusicTrackItem(track, _format_track_display(track))
-                for track in filtered_tracks[:20]
-            ]
+            if filtered:
+                self._track_list.child = [
+                    MusicTrackItem(t, _format_track_display(t))
+                    for t in filtered[:20]
+                ]
+            else:
+                self._track_list.child = [self.__no_results_label()]
+        elif mode == "Artists":
+            filtered = [a for a in items if query in a.lower()]
+            if filtered:
+                self._track_list.child = [
+                    MusicArtistItem(a) for a in filtered[:20]
+                ]
+            else:
+                self._track_list.child = [self.__no_results_label()]
+        elif mode == "Albums":
+            filtered = [a for a in items if query in a.lower()]
+            if filtered:
+                self._track_list.child = [
+                    MusicAlbumItem(a) for a in filtered[:20]
+                ]
+            else:
+                self._track_list.child = [self.__no_results_label()]
+        elif mode == "Playlists":
+            filtered = [p for p in items if query in p.lower()]
+            if filtered:
+                self._track_list.child = [
+                    MusicPlaylistItem(p) for p in filtered[:20]
+                ]
+            else:
+                self._track_list.child = [self.__no_results_label()]
+
+        self._track_list.visible = True
+
+    def __no_results_label(self) -> widgets.Label:
+        return widgets.Label(
+            label="No results found",
+            css_classes=["music-no-results"],
+            style="padding: 1rem;",
+        )

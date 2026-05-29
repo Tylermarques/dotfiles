@@ -37,3 +37,26 @@
     opacity: 0.6;
     font-size: 1rem;
 }
+
+.music-mode-bar {
+    padding: 0.5rem 0;
+}
+
+.music-mode {
+    font-size: 0.85rem;
+    opacity: 0.4;
+    transition: 0.2s;
+}
+
+.music-mode-active {
+    font-size: 0.85rem;
+    opacity: 1;
+    color: $primary;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.music-mode-separator {
+    font-size: 0.85rem;
+    opacity: 0.3;
+}
