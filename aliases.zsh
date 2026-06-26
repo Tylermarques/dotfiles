@@ -48,3 +48,4 @@ alias sv='source .venv/bin/activate'
 alias susys='sudo systemctl'
 alias music='rmpc'
 alias ai='opencode'
+alias get-size="sudo du -B1 -d0 ./* | sort -nr | numfmt --to=iec --suffix=B --padding=7 | sed 's/ / /g'"
