@@ -40,38 +40,14 @@
       "Bash(kubectl auth can-i:*)"
     ]
   },
-  "model": "opus[1m]",
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/home/tyler/.claude/hooks/gsd-check-update.js\""
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/home/tyler/.claude/hooks/gsd-context-monitor.js\""
-          }
-        ]
-      }
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "node \"/home/tyler/.claude/hooks/gsd-statusline.js\""
-  },
+  "model": "claude-fable-5[1m]",
   "enabledPlugins": {
     "playwright-skill@playwright-skill": true,
-    "ralph-loop@claude-plugins-official": true
+    "ralph-loop@claude-plugins-official": false,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "figma@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
-  "fastMode": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
 }

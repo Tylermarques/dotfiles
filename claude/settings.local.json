@@ -2,8 +2,6 @@
   "permissions": {
     "allow": [
       "Bash(journalctl:*)",
-      "Bash(ss:*)",
-      "Bash(npx vibe-kanban:*)",
       "WebSearch",
       "Bash(gh api:*)"
     ],
