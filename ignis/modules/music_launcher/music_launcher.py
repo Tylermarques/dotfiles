@@ -57,7 +57,13 @@ class MusicTrackItem(widgets.Button):
     def play(self) -> None:
         window_manager.close_window("ignis_MUSIC_LAUNCHER")
         escaped_track = shlex.quote(self._track_path)
-        command = f'mpc insert {escaped_track} && mpc next >/dev/null && notify-send "Playing {escaped_track}"'
+        # mpc next fails when stopped; insert appends to the queue end in that
+        # state, so fall back to playing the last queue position
+        command = (
+            f'mpc insert {escaped_track} && '
+            '{ mpc next || mpc play "$(mpc playlist | wc -l)"; } >/dev/null 2>&1 && '
+            f'notify-send "Playing {escaped_track}"'
+        )
         asyncio.create_task(utils.exec_sh_async(command))
 
 
@@ -87,7 +93,14 @@ class MusicArtistItem(widgets.Button):
     def play(self) -> None:
         window_manager.close_window("ignis_MUSIC_LAUNCHER")
         escaped = shlex.quote(self._artist_name)
-        command = f'mpc findadd artist {escaped} && mpc next >/dev/null && notify-send "Playing artist {escaped}"'
+        # findadd appends to the queue end regardless of state, so jump to the
+        # first appended track instead of relying on mpc next
+        command = (
+            'pos=$(($(mpc playlist | wc -l) + 1)); '
+            f'mpc findadd artist {escaped} && '
+            'mpc play "$pos" >/dev/null && '
+            f'notify-send "Playing artist {escaped}"'
+        )
         asyncio.create_task(utils.exec_sh_async(command))
 
 
