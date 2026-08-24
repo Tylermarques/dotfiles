@@ -101,7 +101,6 @@ hl.device({ name = "epic-mouse-v1", sensitivity = -0.5 })
 hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE DISPLAY && systemctl --user restart xdg-desktop-portal-hyprland xdg-desktop-portal")
     hl.exec_cmd("hyprlock --immediate")
-    hl.exec_cmd("ignis init")
     -- XWayland can place dialogs in invisible gaps in a non-rectangular monitor layout.
     hl.exec_cmd("~/.config/hypr/scripts/keep-windows-onscreen.py")
     hl.exec_cmd("~/.config/hypr/scripts/wallpaper-cycle.sh")
