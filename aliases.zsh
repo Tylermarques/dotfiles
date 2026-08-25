@@ -32,6 +32,12 @@ alias cat='bat'
 alias music='ncmpcpp'
 alias ha='hass-cli'
 alias bw-login='export BW_SESSION="$(bw unlock --raw)"'
+# Unlock Bitwarden only when the current session is missing or expired
+bw-ensure() {
+    bw unlock --check &>/dev/null && return 0
+    export BW_SESSION="$(bw unlock --raw)"
+    [ -n "$BW_SESSION" ]
+}
 
 # Music searches for mpd
 alias album='mpc list album | fzf -m | while read album; do mpc searchadd album "$album"; done'
@@ -49,3 +55,11 @@ alias susys='sudo systemctl'
 alias music='rmpc'
 alias ai='opencode'
 alias get-size="sudo du -B1 -d0 ./* | sort -nr | numfmt --to=iec --suffix=B --padding=7 | sed 's/ / /g'"
+# Bring up a wg-quick VPN; BW_SESSION passes through sudo so PostUp can read
+# the private key from Bitwarden (see the conf files)
+wg-up() {
+    bw-ensure || return 1
+    sudo resolvconf -u && sudo --preserve-env=BW_SESSION wg-quick up "$1"
+}
+alias wg-dev-up='wg-up /home/tyler/dotfiles/wireguard/gsl-dev.conf'
+alias wg-prod-up='wg-up /home/tyler/dotfiles/wireguard/gsl-prod.conf'
