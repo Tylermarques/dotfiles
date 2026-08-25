@@ -105,17 +105,17 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("~/.config/hypr/scripts/keep-windows-onscreen.py")
     hl.exec_cmd("~/.config/hypr/scripts/wallpaper-cycle.sh")
     hl.exec_cmd("firefox", { workspace = "1" })
-    hl.exec_cmd("spotify")
-    hl.exec_cmd("todoist")
+    hl.exec_cmd("spotify", { workspace = "2" })
+    hl.exec_cmd("todoist", { workspace = "15" })
     hl.exec_cmd("alacritty", { workspace = "4" })
-    hl.exec_cmd("slack")
-    hl.exec_cmd("vesktop")
+    hl.exec_cmd("slack", { workspace = "3" })
+    hl.exec_cmd("vesktop", { workspace = "16" })
     hl.exec_cmd("hypridle")
     hl.exec_cmd("udiskie")
-    hl.exec_cmd("obsidian")
+    hl.exec_cmd("obsidian", { workspace = "13" })
     hl.exec_cmd("librepods")
     hl.exec_cmd("~/.config/hypr/scripts/start-mail.sh")
-    hl.exec_cmd("obs --startvirtualcam")
+    hl.exec_cmd("obs --startvirtualcam", { workspace = "6" })
 end)
 
 hl.env("XCURSOR_SIZE", "24")
@@ -153,14 +153,15 @@ hl.window_rule({
 
 for workspace, monitor in pairs({
     ["1"] = "DP-3",
-    ["2"] = "DP-1",
-    ["3"] = "DP-2",
+    ["2"] = "DP-3",
+    ["3"] = "DP-3",
     ["4"] = "DP-3",
-    ["5"] = "DP-1",
+    ["5"] = "DP-3",
     ["6"] = "HDMI-A-1",
-    ["12"] = "DP-2",
+    ["12"] = "HDMI-A-1",
     ["13"] = "DP-3",
-    ["16"] = "DP-1",
+    ["15"] = "DP-3",
+    ["16"] = "DP-3",
 }) do
     hl.workspace_rule({ workspace = workspace, monitor = monitor })
 end
@@ -168,12 +169,12 @@ end
 for class, workspace in pairs({
     Rhythmbox = "2",
     Spotify = "2",
-    Slack = "3",
+    slack = "3",
     ["eu.betterbird.Betterbird"] = "12",
     ["com.obsproject.Studio"] = "6",
     chrome = "12",
-    obsidian = "13",
-    Todoist = "15",
+    ["md.Obsidian"] = "13",
+    todoist = "15",
     vesktop = "16",
 }) do
     hl.window_rule({ match = { class = class }, workspace = workspace })
