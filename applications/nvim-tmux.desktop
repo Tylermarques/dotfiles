@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Neovim (tmux)
+GenericName=Text Editor
+Comment=Open in Neovim inside the shared tmux "edit" session in Alacritty
+Exec=/home/tyler/.config/scripts/nvim-tmux.sh %F
+Icon=nvim
+Terminal=false
+NoDisplay=false
+Categories=Utility;TextEditor;
+MimeType=text/plain;text/markdown;text/x-log;application/json;
+StartupWMClass=nvim-edit

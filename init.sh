@@ -18,7 +18,7 @@ config_items=(${config_items:#.})   # Remove '.' from the list
 config_items=(${config_items:#..})  # Remove '..' from the list
 
 # Directories to ignore when symlinking
-ignored_dirs=(.git)
+ignored_dirs=(.git applications)  # applications/ holds .desktop files, linked below
 
 # Specific files to be symlinked directly into ~/
 home_items=( .zshenv .Xresources .gitconfig .claude )
@@ -63,6 +63,18 @@ for item in "${home_items[@]}"; do
         echo "Warning: File $item not found in current directory."
     fi
 done
+
+# Symlink .desktop entries (used by mimeapps.list) into ~/.local/share/applications
+mkdir -p ~/.local/share/applications
+for item in applications/*.desktop; do
+    target=~/.local/share/applications/${item:t}
+    if [[ -e $target && ! -L $target ]]; then
+        echo "Error: $target already exists, refusing to overwrite"
+    else
+        ln -sfn "$PWD/$item" "$target"
+    fi
+done
+update-desktop-database ~/.local/share/applications
 
 # Enable the automount of the NFS from Tailscale
 mkdir /mnt/nfs
