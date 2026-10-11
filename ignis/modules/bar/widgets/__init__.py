@@ -7,6 +7,7 @@ from .workspaces import Workspaces
 from .voice_to_text_button import VoiceToTextBarButton
 from .music import Music
 from .meeting_recorder import MeetingRecorderIndicator
+from .meeting_record_button import MeetingRecordButton
 
 __all__ = [
     "StatusPill",
@@ -18,4 +19,5 @@ __all__ = [
     "VoiceToTextBarButton",
     "Music",
     "MeetingRecorderIndicator",
+    "MeetingRecordButton",
 ]

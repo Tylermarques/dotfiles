@@ -154,6 +154,54 @@
     animation: meeting-recorder-pulse 3s ease-in-out infinite;
 }
 
+/* Manual meeting capture button (right of the workspace labels) */
+.meeting-record-button {
+    @include hover($surface);
+    color: $onSurfaceVariant;
+    border-radius: 1rem;
+    padding: 0 0.6rem;
+    margin: 0 0.5rem 0 0;
+    min-height: 1.9rem;
+    transition: 0.3s;
+
+    .elapsed {
+        margin-left: 0.4rem;
+        font-size: 1.05rem;
+        color: $onSurface;
+    }
+
+    &.unavailable {
+        opacity: 0.35;
+    }
+
+    &.picking {
+        color: $primary;
+        border: 1px solid $primary;
+        animation: meeting-recorder-pulse 1s ease-in-out infinite;
+    }
+
+    &.active {
+        color: $error;
+        background-color: rgba($error, 0.12);
+        @include hover(rgba($error, 0.12));
+
+        .elapsed {
+            animation: none;
+        }
+    }
+
+    /* Started by a provider rule (Meet, Discord): not stoppable with a plain click */
+    &.active.auto {
+        color: $tertiary;
+        background-color: rgba($tertiary, 0.12);
+    }
+
+    &.error {
+        color: $error;
+        background-color: rgba($error, 0.25);
+    }
+}
+
 .microphone-indicator {
     color: $error;
 }
