@@ -3,3 +3,4 @@ hl.monitor({ output = "HDMI-A-1", mode = "3840x2160@60", position = "0x800", sca
 hl.monitor({ output = "DP-3", mode = "3440x1440@144", position = "2160x1900", scale = 1 })
 hl.monitor({ output = "DP-2", mode = "1920x1200@60", position = "5600x1200", scale = 1 })
 hl.monitor({ output = "DP-1", mode = "1920x1200@60", position = "5600x2400", scale = 1 })
+hl.monitor({ output = "desc:LG Electronics LG ULTRAFINE 412NTLE05456", mode = "3840x2160@60", position = "0x800", scale = 1, transform = 1 })

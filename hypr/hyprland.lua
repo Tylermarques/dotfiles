@@ -98,6 +98,11 @@ hl.animation({ leaf = "workspacesOut", enabled = false })
 
 hl.device({ name = "epic-mouse-v1", sensitivity = -0.5 })
 
+-- A hotplugged monitor (e.g. switching a monitor's input) has no rendered painting yet; awww shows black.
+hl.on("monitor.added", function()
+    hl.exec_cmd("~/.config/hypr/scripts/artwall.py render")
+end)
+
 hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE DISPLAY && systemctl --user restart xdg-desktop-portal-hyprland xdg-desktop-portal")
     hl.exec_cmd("hyprlock --immediate")
@@ -157,8 +162,8 @@ for workspace, monitor in pairs({
     ["3"] = "DP-3",
     ["4"] = "DP-3",
     ["5"] = "DP-3",
-    ["6"] = "HDMI-A-1",
-    ["12"] = "HDMI-A-1",
+    ["6"] = "desc:LG Electronics LG ULTRAFINE 412NTLE05456",
+    ["12"] = "desc:LG Electronics LG ULTRAFINE 412NTLE05456",
     ["13"] = "DP-3",
     ["15"] = "DP-3",
     ["16"] = "DP-3",
