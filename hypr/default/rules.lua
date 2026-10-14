@@ -16,5 +16,6 @@ hl.window_rule({ match = { class = "^(md\\.Obsidian)$" }, focus_on_activate = tr
 hl.layer_rule({ match = { namespace = "^(quickshell:bar)$" }, blur = true })
 hl.layer_rule({ match = { namespace = "^(quickshell:notifications)$" }, no_anim = true })
 hl.layer_rule({ match = { namespace = "^(quickshell:controlcenter)$" }, no_anim = true })
+hl.layer_rule({ match = { namespace = "^(quickshell:dashboard)$" }, no_anim = true })
 
 hl.layer_rule({ match = { namespace = "vicinae" }, blur = true, ignore_alpha = 0, no_anim = true })

@@ -14,6 +14,13 @@ Singleton {
     property string powerMenuScreen: ""
     property string musicLauncherScreen: ""
     property string osdScreen: ""
+    property string dashboardScreen: ""
+    // Opened by hover it closes when the pointer leaves; opened by IPC/click it
+    // stays ("pinned") until toggled again or Esc.
+    property bool dashboardPinned: false
+    property int dashboardTab: 0
+    // Pointer is over the bar's centre (hover hot zone).
+    property bool dashboardBarHovered: false
 
     readonly property string focusedScreen: Hyprland.focusedMonitor?.name ?? Quickshell.screens[0]?.name ?? ""
 
@@ -27,6 +34,23 @@ Singleton {
     }
     function toggleMusicLauncher(): void {
         musicLauncherScreen = musicLauncherScreen ? "" : focusedScreen;
+    }
+
+    function openDashboard(screenName: string, pinned: bool): void {
+        if (dashboardScreen !== screenName)
+            dashboardPinned = false;
+        dashboardScreen = screenName;
+        dashboardPinned = dashboardPinned || pinned;
+    }
+    function closeDashboard(): void {
+        dashboardScreen = "";
+        dashboardPinned = false;
+    }
+    function toggleDashboard(screenName: string): void {
+        if (dashboardScreen === screenName && dashboardPinned)
+            closeDashboard();
+        else
+            openDashboard(screenName, true);
     }
 
     // Volume OSD: shown on the focused screen, hidden 3 s after the last call.
@@ -46,6 +70,18 @@ Singleton {
 
         function toggle(): void { root.toggleControlCenter(root.focusedScreen); }
         function close(): void { root.closeControlCenter(); }
+    }
+
+    IpcHandler {
+        target: "dashboard"
+
+        function toggle(): void { root.toggleDashboard(root.focusedScreen); }
+        function close(): void { root.closeDashboard(); }
+        // 0 = Dashboard, 1 = Media, 2 = Performance
+        function tab(index: int): void {
+            root.dashboardTab = index;
+            root.openDashboard(root.focusedScreen, true);
+        }
     }
 
     IpcHandler {

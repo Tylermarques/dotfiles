@@ -27,6 +27,8 @@ Singleton {
     readonly property color fgPrimary: palette.onPrimary ?? "#561d28"
     readonly property color primaryContainer: palette.primaryContainer ?? "#72333e"
     readonly property color fgPrimaryContainer: palette.onPrimaryContainer ?? "#ffd9dc"
+    readonly property color secondary: palette.secondary ?? "#e5bdc0"
+    readonly property color fgSecondaryContainer: palette.onSecondaryContainer ?? "#ffd9dd"
     readonly property color tertiary: palette.tertiary ?? "#e8bf8f"
     readonly property color fgTertiary: palette.onTertiary ?? "#442b06"
     readonly property color error: palette.error ?? "#ffb4ab"

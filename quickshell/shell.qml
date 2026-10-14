@@ -5,6 +5,7 @@ import QtQuick
 import Quickshell
 import qs.modules.bar
 import qs.modules.controlcenter
+import qs.modules.dashboard
 import qs.modules.notifications
 import qs.modules.overlays
 import qs.services
@@ -30,6 +31,12 @@ ShellRoot {
         model: Quickshell.screens
 
         ControlCenterLoader {}
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        DashboardLoader {}
     }
 
     Overlays {}

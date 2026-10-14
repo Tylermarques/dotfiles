@@ -355,3 +355,11 @@ The About page is dropped (it was informational only); `qs --version` / `fastfet
   (still off) → `qs ipc call theme generate`. `exec.lua`: no `ignis init`; gsettings
   icon theme + font moved there. Pre-existing: `hyprland.lua` sets `active_border`
   after requiring `default/colors`, overriding the Material border colour.
+- **Dashboard (2026-10-14)**: Caelestia-style drop-down under the bar centre
+  (`modules/dashboard/`), tabs Dashboard (user/uptime, clock, calendar, CPU/mem/disk
+  rings, now playing) · Media (cover, seek, shuffle/loop, player picker) ·
+  Performance (CPU/GPU with graphs, memory, storage, network). Opens on hovering
+  the bar centre (200 ms delay), closes when the pointer leaves; click or
+  `qs ipc call dashboard toggle|tab N` pins it. `SysStats` polls /proc, df and
+  nvidia-smi every 2 s only while open. No weather tab, lyrics or visualiser.
+  CPU temp needs a CPU hwmon (k10temp is blacklisted by zenpower3-dkms here).
