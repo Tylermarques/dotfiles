@@ -1,5 +1,5 @@
 local primary = "rgb(ffb2bc)"
-local colorFile = io.open(os.getenv("HOME") .. "/.cache/ignis/material/dark_colors-hyprland.conf", "r")
+local colorFile = io.open(os.getenv("HOME") .. "/.cache/quickshell/material/colors-hyprland.conf", "r")
 
 if colorFile then
     local contents = colorFile:read("*a")

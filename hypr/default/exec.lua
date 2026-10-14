@@ -1,5 +1,8 @@
 hl.on("hyprland.start", function()
-    hl.exec_cmd("sleep 1 && ignis init")
+    hl.exec_cmd("qs")
+    -- GTK icon theme and font (previously set by Ignis at startup).
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface icon-theme Papirus")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface font-name 'JetBrains Mono Regular 11'")
     hl.exec_cmd("vicinae server")
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")

@@ -1,0 +1,45 @@
+{
+    "appearance": {
+        "colorsFile": "~/.cache/quickshell/material/colors.json",
+        "darkMode": true
+    },
+    "apps": {
+        "networkSettings": "nm-connection-editor",
+        "soundSettings": "pavucontrol",
+        "terminal": "kitty"
+    },
+    "bar": {
+        "height": 44,
+        "maxScrollWorkspace": 10,
+        "nowPlayingMaxChars": 40,
+        "workspaceLabels": {
+            "10": "0",
+            "11": "O",
+            "12": "C",
+            "13": "N",
+            "14": "M",
+            "15": "T"
+        }
+    },
+    "meetingNotes": {
+        "maxMenuWindows": 12,
+        "webUrl": "http://127.0.0.1:8636"
+    },
+    "notifications": {
+        "dnd": true,
+        "historyCap": 200,
+        "maxPopups": 3,
+        "noHistoryApps": [
+            "agent-manager"
+        ],
+        "popupTimeoutMs": 5000
+    },
+    "recorder": {
+        "directory": "~/Videos",
+        "filename": "%Y-%m-%d_%H-%M-%S",
+        "fps": 60
+    },
+    "user": {
+        "avatar": "/home/tyler/Pictures/headshot-with-puppy.jpg"
+    }
+}

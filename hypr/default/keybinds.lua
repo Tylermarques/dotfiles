@@ -17,13 +17,9 @@ hl.bind(mainMod .. " + ALT + F", hl.dsp.window.fullscreen_state({ internal = 2, 
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind("F11", hl.dsp.window.fullscreen())
 
-hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.exec_cmd("goignis toggle-window ignis_MUSIC_LAUNCHER"))
-hl.bind(mainMod .. " + SHIFT + ALT + M", hl.dsp.exec_cmd("goignis toggle-window ignis_POWERMENU"))
-hl.bind("ALT + F4", hl.dsp.exec_cmd("goignis toggle-window ignis_POWERMENU"))
-hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("~/.config/ignis/scripts/recording.py start"))
-hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("~/.config/ignis/scripts/recording.py continue"))
-hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("~/.config/ignis/scripts/recording.py stop"))
-hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("~/.config/ignis/scripts/recording.py pause"))
+hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.exec_cmd("qs ipc call music toggle"))
+hl.bind(mainMod .. " + SHIFT + ALT + M", hl.dsp.exec_cmd("qs ipc call power toggle"))
+hl.bind("ALT + F4", hl.dsp.exec_cmd("qs ipc call power toggle"))
 
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("GRIMBLAST_HIDE_CURSOR=0 grimblast --notify --freeze copysave area"))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("GRIMBLAST_HIDE_CURSOR=0 grimblast --notify --freeze copysave output"))
@@ -50,13 +46,12 @@ hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 5 && goignis open-window ignis_OSD"))
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 5 && goignis open-window ignis_OSD"))
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t && goignis open-window ignis_OSD"))
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 5 && qs ipc call osd popup"))
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 5 && qs ipc call osd popup"))
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("pamixer -t && qs ipc call osd popup"))
 
 hl.bind(mainMod .. " + minus", hl.dsp.exec_cmd("/home/tyler/dotfiles/scripts/cycle_audio.sh"))
 hl.bind(mainMod .. " + apostrophe", hl.dsp.exec_cmd("/home/tyler/dotfiles/scripts/toggle-airpods-bt-con.sh"))
-hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("/home/tyler/.local/bin/uv run /home/tyler/dotfiles/scripts/voice_to_text.py"))
 
 hl.bind("F9", hl.dsp.exec_cmd("pamixer --get-volume > /tmp/.handy-vol && pamixer --set-volume 15 && pkill -USR2 -n handy"))
 hl.bind("F9", hl.dsp.exec_cmd("pamixer --set-volume $(cat /tmp/.handy-vol) && pkill -USR2 -n handy"), { release = true })
