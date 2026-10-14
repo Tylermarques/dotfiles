@@ -2,7 +2,7 @@
 Type=Application
 Name=Neovim (tmux)
 GenericName=Text Editor
-Comment=Open in Neovim inside the shared tmux "edit" session in Alacritty
+Comment=Open in Neovim inside the shared tmux "edit" session in kitty
 Exec=/home/tyler/.config/scripts/nvim-tmux.sh %F
 Icon=nvim
 Terminal=false

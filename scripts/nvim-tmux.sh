@@ -1,10 +1,10 @@
 #!/bin/sh
 # Open files from a GUI file manager (Thunar etc.) in nvim, inside a single
-# shared tmux session named "edit", displayed in Alacritty.
+# shared tmux session named "edit", displayed in kitty.
 #
-# - First open: creates the "edit" session with nvim and opens Alacritty on it.
+# - First open: creates the "edit" session with nvim and opens kitty on it.
 # - Later opens: adds a new tmux window running nvim to the same session and
-#   focuses the existing Alacritty window (or reopens one if it was closed).
+#   focuses the existing kitty window (or reopens one if it was closed).
 #
 # Wired up via applications/nvim-tmux.desktop and mimeapps.list.
 
@@ -23,7 +23,7 @@ if tmux has-session -t "=$SESSION" 2>/dev/null; then
 else
     tmux new-session -d -s "$SESSION" -c "$cwd" -- nvim "$@"
     # tmux.conf sets detach-on-destroy off globally; for this session we want
-    # the Alacritty window to close when the last nvim exits, not hop to
+    # the kitty window to close when the last nvim exits, not hop to
     # another session.
     tmux set-option -t "$SESSION" detach-on-destroy on
 fi
@@ -34,4 +34,4 @@ if [ -n "$(tmux list-clients -t "=$SESSION" 2>/dev/null)" ]; then
     exit 0
 fi
 
-exec alacritty --class "$CLASS" -e tmux attach-session -t "=$SESSION"
+exec kitty --class "$CLASS" -e tmux attach-session -t "=$SESSION"

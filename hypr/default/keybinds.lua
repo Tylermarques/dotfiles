@@ -1,4 +1,4 @@
-local terminal = "alacritty"
+local terminal = "kitty"
 local fileManager = "thunar"
 local menu = "vicinae toggle"
 local mainMod = "SUPER"
