@@ -22,7 +22,6 @@
       "Bash(git branch:*)",
       "Bash(which:*)",
       "Bash(whoami:*)",
-      "Bash(env:*)",
       "Bash(ps:*)",
       "Bash(pwd:*)",
       "Bash(kubectl get:*)",
@@ -40,14 +39,48 @@
       "Bash(kubectl auth can-i:*)"
     ]
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus",
   "enabledPlugins": {
     "playwright-skill@playwright-skill": true,
     "ralph-loop@claude-plugins-official": false,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "figma@claude-plugins-official": true
+    "figma@claude-plugins-official": true,
+    "posthog@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "medium"
+    }
+  },
   "skipDangerousModePermissionPrompt": true,
-  "theme": "dark"
+  "theme": "dark",
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured (repo shows a homelab Kubernetes cluster plus a Pulumi-managed 'rackspace' project, but no cloud provider identity was confirmed)",
+      "**Repository visibility**: Public — Tylermarques/homelab-infra (github.com:Tylermarques/homelab-infra.git)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured (repo has secret-bootstrap scripts and .gitignore patterns for `*secret.yaml`, `*token*`, `.env`, but no secrets manager was confirmed)",
+      "**Default / protected branches**: main (default); no branch protection rules or rulesets listed via gh",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo (Tylermarques/homelab-infra) and its origin remote only — no additional orgs configured",
+      "**Trusted internal domains**: media.local.tylermarques.com, home.local.tylermarques.com (hosts contacted in this project's transcripts)",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: homecluster/authelia/bootstrap-oidc-secrets.sh, homecluster/authelia/bootstrap-paperless-oidc-secrets.sh, homecluster/authelia/bootstrap-secrets.sh, homecluster/homepage/rbac.yaml, homecluster/meeting-tools/dev/secret-ref.yaml, homelab/.env.example, homelab/talos/secrets.py, rackspace/.env.example, rackspace/Pulumi.prod.yaml, rackspace/apps/cert_manager/letsencrypt-prod.yaml, rackspace/apps/nfs/rbac.yaml, rackspace/secrets.py — share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (e.g. rackspace/Pulumi.prod.yaml, rackspace/apps/cert_manager/letsencrypt-prod.yaml)",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic (namespaces observed in use: default, homepage, argocd — none carry prod/production)",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment (e.g. rackspace/Pulumi.prod.yaml)",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (homelab infrastructure — Kubernetes/Pulumi/ArgoCD homelab management)",
+      "**Trusted repo**: Tylermarques/homelab-infra (public) — working directory is a worktree of this repo; public visibility means only this repo's own work belongs here, confidential material (secrets, personal/entrusted data) is never cleared into it regardless of visibility",
+      "**Org-specific CLIs**: None configured (kubectl used routinely against this cluster; no additional org CLI confirmed)"
+    ]
+  }
 }

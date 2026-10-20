@@ -132,3 +132,9 @@ todoist/config.json
 
 **/__pycache__/
 *.pyc
+
+# Vendored framework, AUR build dirs and stray backups (not config)
+.oh-my-zsh/
+sesh-bin/
+zoxide/
+.zshrc.backup

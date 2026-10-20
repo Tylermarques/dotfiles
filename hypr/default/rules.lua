@@ -11,7 +11,7 @@ hl.window_rule({ match = { class = "^(Material Settings)$" }, float = true })
 
 -- Web Clipper: Obsidian must gain focus when it receives an obsidian:// URI,
 -- otherwise Wayland/Chromium refuse the clipboard read and the note is empty.
-hl.window_rule({ match = { class = "^(md\\.Obsidian)$" }, focus_on_activate = true })
+hl.window_rule({ match = { class = "^(md\\.(obsidian\\.)?Obsidian)$" }, focus_on_activate = true })
 
 hl.layer_rule({ match = { namespace = "^(quickshell:bar)$" }, blur = true })
 hl.layer_rule({ match = { namespace = "^(quickshell:notifications)$" }, no_anim = true })

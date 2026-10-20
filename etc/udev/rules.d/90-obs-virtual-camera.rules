@@ -1,0 +1,6 @@
+# When the boot-time v4l2loopback device for the OBS Virtual Camera appears,
+# pin its format (see obs-virtual-camera-format.service). Without this,
+# PipeWire probes the empty loopback at login and caches a generic format list
+# that no longer matches once OBS attaches, so browsers using the camera portal
+# negotiate a format the device rejects and the camera never starts.
+ACTION=="add", SUBSYSTEM=="video4linux", KERNEL=="video10", ATTR{name}=="OBS Virtual Camera", TAG+="systemd", ENV{SYSTEMD_WANTS}+="obs-virtual-camera-format.service"

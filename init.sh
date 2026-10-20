@@ -18,7 +18,7 @@ config_items=(${config_items:#.})   # Remove '.' from the list
 config_items=(${config_items:#..})  # Remove '..' from the list
 
 # Directories to ignore when symlinking
-ignored_dirs=(.git applications)  # applications/ holds .desktop files, linked below
+ignored_dirs=(.git applications dbus-1)  # applications/ and dbus-1/ are linked into ~/.local/share below
 
 # Specific files to be symlinked directly into ~/
 home_items=( .zshenv .Xresources .gitconfig .claude )
@@ -75,6 +75,17 @@ for item in applications/*.desktop; do
     fi
 done
 update-desktop-database ~/.local/share/applications
+
+# Symlink user D-Bus service overrides (e.g. FileManager1 -> Thunar)
+mkdir -p ~/.local/share/dbus-1/services
+for item in dbus-1/services/*.service; do
+    target=~/.local/share/dbus-1/services/${item:t}
+    if [[ -e $target && ! -L $target ]]; then
+        echo "Error: $target already exists, refusing to overwrite"
+    else
+        ln -sfn "$PWD/$item" "$target"
+    fi
+done
 
 # Enable the automount of the NFS from Tailscale
 mkdir /mnt/nfs

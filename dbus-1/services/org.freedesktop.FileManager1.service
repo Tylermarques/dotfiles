@@ -1,0 +1,8 @@
+# Make Thunar the handler for org.freedesktop.FileManager1 ("Show in folder"
+# from Firefox, Chrome, etc.). Both thunar and dolphin ship a system-wide
+# service file for this name and dbus-broker kept Dolphin's; a user-level file
+# (~/.local/share/dbus-1/services) is read first and wins.
+[D-BUS Service]
+Name=org.freedesktop.FileManager1
+Exec=/usr/bin/Thunar --gapplication-service
+SystemdService=thunar.service

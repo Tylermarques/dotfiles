@@ -30,7 +30,9 @@ fi
 
 if [ -n "$(tmux list-clients -t "=$SESSION" 2>/dev/null)" ]; then
     # Session already has a terminal attached; bring it to the front.
-    command -v hyprctl >/dev/null 2>&1 && hyprctl dispatch focuswindow "class:$CLASS" >/dev/null
+    # This Hyprland build takes Lua dispatcher expressions, not the classic
+    # "focuswindow class:..." form (which errors silently here).
+    command -v hyprctl >/dev/null 2>&1 && hyprctl dispatch "hl.dsp.focus({ window = \"class:$CLASS\" })" >/dev/null
     exit 0
 fi
 

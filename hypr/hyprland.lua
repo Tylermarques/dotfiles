@@ -56,6 +56,12 @@ hl.config({
     misc = {
         force_default_wallpaper = 0,
         disable_hyprland_logo = false,
+        -- Let the compositor re-enable DPMS itself on input. hypridle's on-resume hook
+        -- can go dead when an app (Steam) toggles the D-Bus screensaver inhibit while idle.
+        key_press_enables_dpms = true,
+        mouse_move_enables_dpms = true,
+        -- Allow relaunching hyprlock if it dies, instead of a permanently locked red screen.
+        allow_session_lock_restore = true,
     },
     input = {
         kb_layout = "us",
@@ -104,11 +110,14 @@ hl.on("monitor.added", function()
 end)
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE DISPLAY && systemctl --user restart xdg-desktop-portal-hyprland xdg-desktop-portal")
+    -- Import the session env into systemd first; the wallpaper daemon (a user service) needs it to reach Wayland.
+    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE DISPLAY && systemctl --user restart xdg-desktop-portal-hyprland xdg-desktop-portal && systemctl --user start awww-daemon.service")
     hl.exec_cmd("hyprlock --immediate")
     -- XWayland can place dialogs in invisible gaps in a non-rectangular monitor layout.
     hl.exec_cmd("~/.config/hypr/scripts/keep-windows-onscreen.py")
-    hl.exec_cmd("~/.config/hypr/scripts/wallpaper-cycle.sh")
+    -- Wallpaper: hourly museum paintings (see scripts/artwall.py and systemd/user/artwall.*, awww-daemon.service).
+    -- Re-apply the current painting (waits for the daemon); the systemd timer (artwall.timer) advances it hourly.
+    hl.exec_cmd("~/.config/hypr/scripts/artwall.py render")
     hl.exec_cmd("firefox", { workspace = "1" })
     hl.exec_cmd("spotify", { workspace = "2" })
     hl.exec_cmd("todoist", { workspace = "15" })
@@ -119,6 +128,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("udiskie")
     hl.exec_cmd("obsidian", { workspace = "13" })
     hl.exec_cmd("librepods")
+    hl.exec_cmd("kdeconnectd")
+    hl.exec_cmd("kdeconnect-indicator")
     hl.exec_cmd("~/.config/hypr/scripts/start-mail.sh")
     hl.exec_cmd("obs --startvirtualcam", { workspace = "6" })
 end)
@@ -129,6 +140,7 @@ hl.env("HYPRCURSOR_SIZE", "24")
 local mainMod = "SUPER"
 
 hl.bind(mainMod .. " + BackSpace", hl.dsp.exec_cmd("~/.config/hypr/scripts/open-meet.sh"))
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/artwall.py next --force"))
 hl.bind(mainMod .. " + G", hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + SHIFT + G", hl.dsp.window.move({ workspace = "special:magic" }))
 hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd("hyprshot -m window"))

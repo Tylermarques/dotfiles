@@ -5,3 +5,6 @@ ZDOTDIR=~/.config
 
 # Default terminal for xdg-terminal-exec, Thunar, and other launchers
 export TERMINAL=kitty
+
+# opencode
+export PATH=/home/tyler/.opencode/bin:$PATH

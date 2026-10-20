@@ -60,12 +60,10 @@ application/x-extension-ics=userapp-Thunderbird-8R5CS3.desktop;
 x-scheme-handler/net.thunderbird=userapp-Thunderbird-PWQ7R3.desktop;
 
 [Default Applications]
-# Text files -> nvim inside the shared tmux session (scripts/nvim-tmux.sh)
 text/plain=nvim-tmux.desktop
 text/markdown=nvim-tmux.desktop
 text/x-log=nvim-tmux.desktop
 application/json=nvim-tmux.desktop
-# All video types VLC advertises -> VLC
 video/3gp=vlc.desktop
 video/3gpp=vlc.desktop
 video/3gpp2=vlc.desktop

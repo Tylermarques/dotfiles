@@ -13,6 +13,8 @@ return {
   ---@module 'obsidian'
   ---@type obsidian.config
   opts = {
+    -- Use the new `:Obsidian <subcommand>` interface; silences the legacy_commands deprecation warning
+    legacy_commands = false,
     workspaces = {
       {
         name = "personal",

@@ -11,11 +11,15 @@ monitors = json.loads(subprocess.check_output(["hyprctl", "monitors", "-j"]))
 
 monitor_bounds = {}
 for m in monitors:
+    w = m["width"] / m["scale"]
+    h = m["height"] / m["scale"]
+    if m["transform"] % 2 == 1:  # 90/270 degree rotations swap the axes
+        w, h = h, w
     monitor_bounds[m["id"]] = {
         "x": m["x"],
         "y": m["y"],
-        "w": m["width"] / m["scale"],
-        "h": m["height"] / m["scale"],
+        "w": w,
+        "h": h,
     }
 
 for c in clients:
@@ -80,11 +84,15 @@ monitors = json.loads(subprocess.check_output(["hyprctl", "monitors", "-j"]))
 
 monitor_bounds = {}
 for m in monitors:
+    w = m["width"] / m["scale"]
+    h = m["height"] / m["scale"]
+    if m["transform"] % 2 == 1:  # 90/270 degree rotations swap the axes
+        w, h = h, w
     monitor_bounds[m["id"]] = {
         "x": m["x"],
         "y": m["y"],
-        "w": m["width"] / m["scale"],
-        "h": m["height"] / m["scale"],
+        "w": w,
+        "h": h,
     }
 
 for c in clients:

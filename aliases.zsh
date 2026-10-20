@@ -61,5 +61,11 @@ wg-up() {
     bw-ensure || return 1
     sudo resolvconf -u && sudo --preserve-env=BW_SESSION wg-quick up "$1"
 }
+# Tearing down needs no Bitwarden session; the key is already in the interface
+wg-down() {
+    sudo wg-quick down "$1"
+}
 alias wg-dev-up='wg-up /home/tyler/dotfiles/wireguard/gsl-dev.conf'
+alias wg-dev-down='wg-down /home/tyler/dotfiles/wireguard/gsl-dev.conf'
 alias wg-prod-up='wg-up /home/tyler/dotfiles/wireguard/gsl-prod.conf'
+alias wg-prod-down='wg-down /home/tyler/dotfiles/wireguard/gsl-prod.conf'
