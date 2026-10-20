@@ -58,4 +58,3 @@ hl.bind("F9", hl.dsp.exec_cmd("pamixer --set-volume $(cat /tmp/.handy-vol) && pk
 hl.bind("F10", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 1"))
 hl.bind("F10", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 0"), { release = true })
 
-hl.bind("F7", hl.dsp.exec_cmd("aside query --mic"))
