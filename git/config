@@ -96,3 +96,13 @@
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
+[credential "https://portal.goodstartlabs.com/api/v1/lfs"]
+	helper = 
+	helper = !/home/tyler/.local/share/gsl-cli/venv/bin/python -P -m gsl --env prod lfs credential
+	useHttpPath = true
+[lfs "https://portal.goodstartlabs.com/api/v1/lfs"]
+	activitytimeout = 600
+	standalonetransferagent = gsl-prod
+[lfs "customtransfer.gsl-prod"]
+	path = /home/tyler/.local/share/gsl-cli/venv/bin/python
+	args = -P -m gsl --env prod lfs agent

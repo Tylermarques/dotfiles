@@ -1,0 +1,5 @@
+# herdr keeps its sockets, logs and session state beside config.toml.
+# Track only the configuration.
+*
+!.gitignore
+!config.toml

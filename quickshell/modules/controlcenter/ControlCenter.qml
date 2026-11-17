@@ -109,6 +109,7 @@ PanelWindow {
                     UserRow {
                         onCloseRequested: Panels.closeControlCenter()
                     }
+                    PackagesSection {}
                     Repeater {
                         model: Media.players
                         MediaCard {

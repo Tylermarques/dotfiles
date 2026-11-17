@@ -5,7 +5,8 @@ Quickshell has no generic D-Bus client, so this process does the talking:
 
   stdout  one JSON object per line
             {"type": "state", "available", "isRecording", "pickerActive",
-             "isManual", "provider", "title", "meetingId", "startMs"}
+             "stopping", "isManual", "provider", "title", "meetingId", "startMs",
+             "failures", "processing"}
             {"type": "error", "message": "..."}
   stdin   one JSON object per line
             {"call": "StopRecording", "args": [true]}
@@ -32,6 +33,12 @@ INTERFACE_XML = """<node>
     <property name="IsRecording" type="b" access="read"/>
     <property name="CurrentMeeting" type="a{sv}" access="read"/>
     <property name="PickerActive" type="b" access="read"/>
+    <property name="Stopping" type="b" access="read"/>
+    <property name="Failures" type="s" access="read"/>
+    <property name="Processing" type="s" access="read"/>
+    <method name="DismissFailures">
+      <arg direction="out" type="u" name="dismissed"/>
+    </method>
     <method name="StartManualRecording">
       <arg direction="in" type="s" name="window_address"/>
       <arg direction="out" type="i" name="meeting_id"/>
@@ -58,7 +65,14 @@ METHODS = {
     "StartManualRecording": "(s)",
     "StopRecording": "(b)",
     "ToggleManualRecording": None,
+    "DismissFailures": None,
 }
+
+# Per-method call timeout in ms (default 10 s). A stop waits for the recorder
+# SIGINT shutdown and the ffmpeg merge, which can take more than 10 s; a
+# client-side timeout would show a false error while the stop continues.
+TIMEOUTS_MS = {"StopRecording": 300_000, "ToggleManualRecording": 300_000}
+DEFAULT_TIMEOUT_MS = 10_000
 
 # "GDBus.Error:org.meetingnotes.Error.AlreadyRecording: message" -> "message"
 GDBUS_ERROR_RE = re.compile(r"^GDBus\.Error:[\w.]+:\s*")
@@ -117,8 +131,9 @@ class Bridge:
 
     def publish(self, *_args) -> None:
         state = {"type": "state", "available": False, "isRecording": False,
-                 "pickerActive": False, "isManual": False, "provider": "",
-                 "title": "", "meetingId": 0, "startMs": 0}
+                 "pickerActive": False, "stopping": False, "isManual": False, "provider": "",
+                 "title": "", "meetingId": 0, "startMs": 0,
+                 "failures": [], "processing": None}
 
         if self.proxy is not None and self.proxy.get_name_owner() is not None:
             meeting = self.cached("CurrentMeeting", {}) or {}
@@ -126,10 +141,23 @@ class Bridge:
                 available=True,
                 isRecording=bool(self.cached("IsRecording", False)),
                 pickerActive=bool(self.cached("PickerActive", False)),
+                stopping=bool(self.cached("Stopping", False)),
                 isManual=bool(meeting.get("manual", False)),
                 provider=str(meeting.get("provider", "")),
                 title=display_title(str(meeting.get("window_title", ""))),
             )
+            try:
+                failures = json.loads(self.cached("Failures", "[]") or "[]")
+                if isinstance(failures, list):
+                    state["failures"] = failures
+            except ValueError:
+                pass
+            try:
+                processing = json.loads(self.cached("Processing", "{}") or "{}")
+                if isinstance(processing, dict) and "meeting_id" in processing:
+                    state["processing"] = processing
+            except ValueError:
+                pass
             try:
                 state["meetingId"] = int(meeting.get("meeting_id", 0) or 0)
             except (TypeError, ValueError):
@@ -186,7 +214,8 @@ class Bridge:
             except GLib.Error as exc:
                 emit({"type": "error", "message": GDBUS_ERROR_RE.sub("", exc.message)})
 
-        self.proxy.call(method, params, Gio.DBusCallFlags.NONE, 10_000, None, done)
+        self.proxy.call(method, params, Gio.DBusCallFlags.NONE,
+                        TIMEOUTS_MS.get(method, DEFAULT_TIMEOUT_MS), None, done)
 
 
 def main() -> None:

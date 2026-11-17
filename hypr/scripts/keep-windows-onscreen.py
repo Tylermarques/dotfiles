@@ -86,9 +86,13 @@ def rescue(addr):
     ww, wh = win["size"]
     cx = int(r["ux"] + max(0, r["uw"] - ww) / 2)
     cy = int(r["uy"] + max(0, r["uh"] - wh) / 2)
-    subprocess.run(["hyprctl", "dispatch", "movewindowpixel",
-                    f"exact {cx} {cy},address:{win['address']}"],
-                   capture_output=True)
+    lua = (f'hl.dsp.window.move({{ x = {cx}, y = {cy}, exact = true, '
+           f'window = "address:{win['address']}" }})')
+    res = subprocess.run(["hyprctl", "dispatch", lua],
+                         capture_output=True, text=True)
+    if res.returncode != 0 or res.stdout.strip() != "ok":
+        log(f"move failed for {win['class']!r}: {(res.stdout + res.stderr).strip()}")
+        return False
     log(f"rescued {win['class']!r} {win['title']!r} at {frac:.0%} visible -> ({cx},{cy})")
     return True
 

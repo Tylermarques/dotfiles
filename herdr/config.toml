@@ -1,0 +1,76 @@
+# herdr configuration. Keys match agent-manager and the tmux config in
+# ../tmux/tmux.conf, which agent-manager loads inside every session.
+# Print every option with `herdr --default-config`.
+# Validate with `herdr config check`; apply with `herdr server reload-config`.
+
+onboarding = false
+
+[keys]
+# herdr runs inside tmux, and tmux takes ctrl+space first. ctrl+b is free
+# there because tmux.conf moves the tmux prefix off it.
+prefix = "ctrl+b"
+
+# --- agent-manager keys that work inside a session (direct, no prefix) ---
+
+# ctrl+q and ctrl+\ go "back to the manager". The session navigator is the
+# closest thing to the agent-manager list: j/k move, enter opens, / searches,
+# left/right step between workspaces, b/w/i/d filter by agent state.
+goto = ["prefix+g", "ctrl+q", "ctrl+\\"]
+
+# ctrl+] resizes the split.
+resize_mode = "ctrl+]"
+
+# --- tmux prefix keys ---
+
+# prefix+d detaches in tmux. prefix+q is the agent-manager "quit, sessions
+# keep running" key.
+detach = ["prefix+q", "prefix+d"]
+
+# prefix+r reloads the config.
+reload_config = ["prefix+r", "prefix+shift+r"]
+
+# prefix+v and prefix+% split side by side, prefix+" splits stacked.
+split_vertical = ["prefix+v", "prefix+%"]
+split_horizontal = ["prefix+minus", "prefix+\""]
+
+# prefix+ctrl+p / prefix+ctrl+n step through tabs, as tmux does for windows.
+# ctrl+h / ctrl+l are not used: the outer tmux takes them for pane movement.
+previous_tab = ["prefix+p", "prefix+ctrl+p"]
+next_tab = ["prefix+n", "prefix+ctrl+n"]
+
+# prefix+, renames the tmux window.
+rename_tab = ["prefix+shift+t", "prefix+comma"]
+
+# prefix+tab goes back to the last window in tmux. herdr has no "last tab"
+# action, so this goes back to the last focused pane in any tab or workspace.
+last_pane = "prefix+tab"
+# prefix+o steps to the next pane, as in tmux. These two actions move off
+# their herdr defaults (prefix+tab and prefix+o) to make room.
+cycle_pane_next = "prefix+o"
+open_notification_target = "prefix+i"
+
+# --- navigate mode (prefix+w): the sidebar cursor ---
+
+# j/k move the row cursor, as in the agent-manager list. Pane focus moves to
+# ctrl+j / ctrl+k; h/l and the left/right arrows keep their defaults.
+navigate_workspace_up = ["up", "k"]
+navigate_workspace_down = ["down", "j"]
+navigate_pane_up = "ctrl+k"
+navigate_pane_down = "ctrl+j"
+
+# ctrl+r opens the review of the session's changes in agent-manager.
+# herdr has no review screen, so this opens lazygit in the pane's directory.
+[[keys.command]]
+key = "ctrl+r"
+type = "popup"
+command = "cd \"${HERDR_ACTIVE_PANE_CWD:-.}\" && exec lazygit"
+description = "review the changes in this directory"
+width = "95%"
+height = "95%"
+
+# F3 opens the session's directory in the editor.
+[[keys.command]]
+key = "f3"
+type = "pane"
+command = "cd \"${HERDR_ACTIVE_PANE_CWD:-.}\" && exec ${EDITOR:-nvim} ."
+description = "open this directory in the editor"

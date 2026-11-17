@@ -16,6 +16,7 @@ Singleton {
     readonly property alias bar: adapter.bar
     readonly property alias meetingNotes: adapter.meetingNotes
     readonly property alias apps: adapter.apps
+    readonly property alias packages: adapter.packages
 
     function expand(path: string): string {
         return path.startsWith("~/") ? Quickshell.env("HOME") + path.slice(1) : path;
@@ -58,6 +59,12 @@ Singleton {
             property JsonObject meetingNotes: JsonObject {
                 property string webUrl: "http://127.0.0.1:8636"
                 property int maxMenuWindows: 12
+            }
+            property JsonObject packages: JsonObject {
+                // Written by ~/Projects/package-tracker (pkgtrack run, hourly timer).
+                property string file: "~/.local/state/package-tracker/packages.json"
+                property string project: "~/Projects/package-tracker"
+                property int maxRows: 6
             }
             property JsonObject apps: JsonObject {
                 property string terminal: "kitty"
