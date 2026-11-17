@@ -138,3 +138,6 @@ todoist/config.json
 sesh-bin/
 zoxide/
 .zshrc.backup
+
+# holds an OAuth client secret
+opencode/opencode.jsonc
