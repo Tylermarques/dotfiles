@@ -1,0 +1,7 @@
+{
+  "deny": [],
+  "env": [
+    "SWITCHBOARD_CLAUDE_USAGE_WRITER"
+  ],
+  "sandbox": false
+}
